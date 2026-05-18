@@ -1,28 +1,43 @@
 <!-- importa o header -->
 <%- include('../partials/header') %>
+    <main class="login-container">
+        <div class="card"
+            style="width: 100%; max-width: 400px; padding: 2rem; border: 2px solid var(--cor-borda); box-shadow: 6px 6px 0px var(--cor-borda); background-color: var(--cor-fundo);">
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <i class="fa-solid fa-circle-user fa-4x" style="color: var(--cor-destaque); margin-bottom: 10px;"></i>
+                <h2 style="margin: 0;">Acesso Restrito</h2>
+                <p style="color: var(--cor-texto-secundario); margin-top: 5px;">Faça login para continuar.</p>
+            </div>
 
-<main style="height: 300px;">
-    <div class="container">
-        <div class="card">
-            <form action="/usuarios/login" method="post">
-                <!-- Caixinha de email -->
-                <div>
-                    <label for="email_login"> Email </label>
-                    <input type="email" id="email_login" name="email">
-                </div> 
-                <!-- Caixinha de senha -->
-                <div>
-                    <label for="senha_login"> Senha </label>
-                    <input type="password" id="senha_login" name="senha">
-                </div> 
-                <!-- Butão de envio do formulário -->
-                <button type="submit"> Entrar </button>
-                <!-- Link pra página de cadastro -->
-                <a href="/cadastro"> Cadastro </a>
+            <form action="/usuarios/login" method="POST">
+                <div class="form-group">
+                    <label for="email_login">
+                        <i class="fa-solid fa-envelope"></i> E-mail
+                    </label>
+                    <input type="email" id="email_login" name="email" class="form-control"
+                        placeholder="Seu e-mail cadastrado" required>
+                </div>
+                <div class="form-group">
+                    <label for="senha_login">
+                        <i class="fa-solid fa-lock"></i> Senha
+                    </label>
+                    <input type="password" id="senha_login" name="senha" class="form-control"
+                        placeholder="Sua senha secreta" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px; font-size: 16px;">
+                    <i class="fa-solid fa-right-to-bracket"></i> Entrar
+                </button>
+
+                <div style="text-align: center; margin-top: 25px;">
+                    <a href="/cadastro"
+                        style="color: var(--cor-texto-principal); font-weight: bold; text-decoration: none;">
+                        Não tem uma conta? <span style="color: var(--cor-destaque); text-decoration: underline;">Crie
+                            aqui</span>
+                    </a>
+                </div>
+
             </form>
         </div>
-    </div>
-</main>
 
-<!-- importa o footer -->
-<%- include('../partials/footer') %>
+    </main>

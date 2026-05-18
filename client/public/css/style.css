@@ -1,8 +1,81 @@
-/* *{
-    background-color: orange;
-    margin: 10px;
+/* CRIANDO UM DESIGN SYSTEM PARA O SISTEMA */
+/* Cores padrão do sistema são: Vermelho, branco e preto */
+/* IMPORTAÇÃO DAS FONTES DO PROJETO */
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+/* CRIAÇÃO DAS VARIÁVEIS PARA UTILIZAÇÃO */
+:root{
+    /* Cores base do sistema */
+    --cor-fundo: #FFF;
+    --cor-texto-principal: #000;
+    --cor-texto-inverso: #FFF;
+    --cor-destaque: #FF0000;
+    --cor-borda: #000;
+    --cor-menu: #000;
+
+    /* outras configurações */
+    --radius-padrao: 10px;
+    --fonte-principal: "Google Sans", sans-serif;
 }
 
+/* ESTILOS GLOBAIS E FOOTER FIXO LÁ EM BAIXO SEMPRE */
+
 body{
-    background-color: aquamarine;
-} */
+    background-color: var(--cor-fundo);
+    color: var(--cor-texto-principal);
+    font-family: var(--fonte-principal);
+    margin: 0;
+    padding: 0;
+    /* FLEX NAS PÁGINA PARA FORÇAR O FOOTER PRO CHÃO */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* FORÇA A PÁGINA A TER 100% DE ALTURA */
+}
+
+/* Classe para o rodapé */
+.footer-sistema{
+    margin-top: auto;
+    text-align: center;
+    background-color: var(--cor-fundo);
+    border-top: 2px solid var(--cor-borda);
+}
+
+/* CONFIGURAÇÕES DE CABEÇALHO */
+/* Class do cabeçalho geral */
+.header-sistema {
+    background-color: var(--cor-menu);
+    color: var(--cor-texto-inverso);
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 5px solid var(--cor-destaque);
+}
+/* Texto do cabeçalho */
+.header-sistema h2 {
+    margin:0;
+    letter-spacing: 2px;
+}
+/* Apenas o menu */
+.nav-menu{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* CAIXA PRINCIPAL DO MAIN */
+/* estilo apenas para a página de login */
+.login-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    padding: 20px;
+}
+/* estilo para as demais páginas */
+.container{
+    width: 10%;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+}
