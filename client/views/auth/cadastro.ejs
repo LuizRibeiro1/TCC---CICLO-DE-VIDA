@@ -3,104 +3,61 @@
 
 <main>
     <div class="container">
-        <!-- Estilo do card geral -->
         <div class="card"
         style="padding: 2rem; border: 2px solid var(--cor-borda); box-shadow: 6px 6px 0px var(--cor-borda); 
         background-color: var(--cor-fundo);">
-            <!-- Texto inicial -->
             <h2 style="color: var(--cor-destaque); text-align: center; margin-bottom: 5px;"> 
                 <i class="fa-solid fa-user-plus"></i>
                 CRIAR NOVA CONTA 
             </h2>
-            <!-- Formulário de cadastro -->
-            <form action="/usuarios/cadastrar" method="post" enctype="multipart/form-data">
+            <p style="text-align: center; color: var(--cor-texto-secundario); margin-bottom: 1.5rem;">
+                Novos usuários são cadastrados como funcionário.
+            </p>
 
-                <div class="row">
-                    <div class="col">
-                        <fieldset>
-                            <legend class="float-none w-auto"> Informações pessoais </legend>
-                        </fieldset>
-
-                        <!-- Caixinha de nome -->
-                         <div class="form-group">
-                            <label for="nome">
-                                <i class="fa-solid fa-id-card"></i> Nome Completo:      
-                            </label>
-                            <input type="text" id="nome" name="nome" class="form-control" required>
-                         </div>
-                         <!-- Legenda divisão 2 -->
-                        <fieldset class="mt-3">
-                            <legend class="float-none w-auto"> Informações de login </legend>
-                        </fieldset>
-
-                        <!-- Caixinha de email -->
-                        <div class="form-group">
-                            <label for="email"> <i class="fa-solid fa-envelope"></i> Email:</label>
-                            <input type="email" id="email" name="email" class="form-control" required>
-                        </div>
-
-                        <!-- Caixinha de perfil -->
-                        <div class="form-group">
-                            <label for="perfil"> <i class="fa-solid fa-users"></i> Qual seu papel?</label>
-                            <select name="perfil" id="perfil" class="form-control" required>
-                                <option value="ofertante"> Quero oferecer produtos </option>
-                                <option value="interessado"> Busco produtos </option>
-                            </select>
-                        </div>
-                        <!-- Caixinha de foto -->
-                        <div class="form-group">
-                            <label for="foto"><i class="fa-solid fa-camera"></i> Foto do produto</label>
-                            <input type="file" name="foto" id="foto" class="form-control" accept="image/*" required>
-                        </div>
-                    </div>
-                    <!-- SEGUNDA COLUNA -->
-                    <div class="col">
-                    <!-- Legenda divisão 1 -->
-                        <fieldset>
-                            <legend class="float-none w-auto text-white"> - </legend>
-                        </fieldset>
-
-                        <!-- Caixinha de telefone -->
-                         <div class="form-group">
-                            <label for="telefone">
-                                <i class="fa-solid fa-phone"></i> Telefone / Whatsapp:      
-                            </label>
-                            <input type="text" id="telefone" name="telefone" class="form-control" required>
-                         </div>
-                         <!-- Legenda divisão 2 -->
-                        <fieldset class="mt-3">
-                            <legend class="float-none w-auto text-white"> - </legend>
-                        </fieldset>
-
-                        <!-- Caixinha de senha -->
-                         <div class="form-group"> 
-                            <label for="senha"> <i class="fa-solid fa-lock"></i> Senha:</label>
-                            <input type="password" name="senha" id="senha" class="form-control" required>
-                         </div>
-
-                         <!-- PREVIEW DA IMAGEM -->
-                          <div id="preview-box" class="preview-container max-width:100%" style="height: 230px;">
-                            <img src="..." alt="Foto do usuário" id="preview-img" style="height: 230px; width: auto;">
-                          </div>
-                    </div>
+            <form action="/usuarios/cadastrar" method="post">
+                <div class="form-group">
+                    <label for="nome">
+                        <i class="fa-solid fa-id-card"></i> Nome completo
+                    </label>
+                    <input type="text" id="nome" name="nome" class="form-control" maxlength="65" required>
                 </div>
-                <!-- Botão de envio do formulário -->
-                 <button type="submit" class="btn btn-secondary" style="width: 100%; margin-top: 15px;">
+
+                <div class="form-group">
+                    <label for="email">
+                        <i class="fa-solid fa-envelope"></i> E-mail
+                    </label>
+                    <input type="email" id="email" name="email" class="form-control" maxlength="65" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="senha">
+                        <i class="fa-solid fa-lock"></i> Senha
+                    </label>
+                    <input type="password" name="senha" id="senha" class="form-control" minlength="6" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmar_senha">
+                        <i class="fa-solid fa-lock"></i> Confirmar senha
+                    </label>
+                    <input type="password" name="confirmar_senha" id="confirmar_senha" class="form-control" minlength="6" required>
+                </div>
+
+                <button type="submit" class="btn btn-secondary" style="width: 100%; margin-top: 15px;">
                     <i class="fa-solid fa-check"></i> Cadastrar
-                 </button>
-                 <!-- Opção para ir para página de login -->
-                  <div style="text-align: center; margin-top: 20px;">
-                        <a href="/login" style="color: var(--cor-texto-principal); font-weight: bold; text-decoration: none;">
-                            Já tem conta? 
-                            <span style="color: var(--cor-destaque); text-decoration: underline;"> 
-                                Faça Login
-                            </span>
-                        </a>
-                  </div>
+                </button>
+
+                <div style="text-align: center; margin-top: 20px;">
+                    <a href="/login" style="color: var(--cor-texto-principal); font-weight: bold; text-decoration: none;">
+                        Já tem conta? 
+                        <span style="color: var(--cor-destaque); text-decoration: underline;"> 
+                            Faça Login
+                        </span>
+                    </a>
+                </div>
             </form>
         </div>
     </div>
 </main>
 
-<!-- importa o footer -->
 <%- include('../partials/footer')  %>

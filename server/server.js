@@ -36,7 +36,10 @@ app.get("/", (req, res) => {
 
 //Rota que retorna a página de login
 app.get("/login", (req, res) => {
-  res.render('auth/login');
+  res.render('auth/login', {
+    sucesso: req.query.sucesso === '1',
+    cadastro: req.query.cadastro === '1'
+  });
 });
 
 // Rota que retorna a página de cadastro de usuário

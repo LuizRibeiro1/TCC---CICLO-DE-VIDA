@@ -1,89 +1,95 @@
--- Deleta o banco de dados 
-DROP DATABASE sistema_trocas;
+DROP DATABASE IF EXISTS LifeStock;
 
--- Cria o banco de dados sistema_trocas
-CREATE DATABASE IF NOT EXISTS sistema_trocas;
+CREATE DATABASE LifeStock;
+USE LifeStock;
 
--- UTILIZA O BANCO CRIADO PARA CRIAÇÃO DAS TABELAS
-USE sistema_trocas;
-
--- Deleta as tabelas antigas caso existam
-DROP TABLE IF EXISTS usuarios;
-DROP TABLE IF EXISTS produtos;
-DROP TABLE IF EXISTS interesses;
-
--- Tabela usuários
-CREATE TABLE usuarios(
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	nome VARCHAR(100),
-    email VARCHAR(100),
-    senha VARCHAR(255),
-    telefone VARCHAR(20),
-    foto VARCHAR(255),
-    perfil ENUM('administrador', 'ofertante', 'interessado')
+-- =========================
+-- TABELA PERFIL
+-- =========================
+CREATE TABLE PERFIL (
+    id_perfil INT PRIMARY KEY AUTO_INCREMENT,
+    nome_perfil VARCHAR(50) NOT NULL
 );
 
--- Tabela produtos
-CREATE TABLE produtos(
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	nome VARCHAR(100),
-	descricao TEXT,
-    preco DECIMAL(10,2),
-	condicao ENUM('novo', 'usado') DEFAULT 'usado',
-    foto VARCHAR(255),
-	is_publico BOOLEAN DEFAULT TRUE,
-    status_troca BOOLEAN DEFAULT FALSE,
-    id_usuario INT,
-    FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE
+INSERT INTO PERFIL (nome_perfil) VALUES
+('FUNCIONARIO'),
+('ADMINISTRADOR');
+
+-- =========================
+-- TABELA USUARIO
+-- =========================
+CREATE TABLE USUARIO (
+    id_usuario INT PRIMARY KEY AUTO_INCREMENT,
+    nome_usuario VARCHAR(65) NOT NULL,
+    email_usuario VARCHAR(65) UNIQUE NOT NULL,
+    senha_hash VARCHAR(255) NOT NULL,
+    id_perfil INT NOT NULL,
+    FOREIGN KEY (id_perfil) REFERENCES PERFIL(id_perfil)
 );
 
--- Tabela interesses
-CREATE TABLE interesses(
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	id_produto INT,
-    id_interessado INT,
-    data_interesse DATETIME DEFAULT CURRENT_TIMESTAMP,
-    -- REFERENCIAS DE CHAVE ESTRANGEIRAS
-    FOREIGN KEY (id_produto)     REFERENCES produtos(id) ON DELETE CASCADE,
-    FOREIGN KEY (id_interessado) REFERENCES usuarios(id) ON DELETE CASCADE 
+-- =========================
+-- TABELA PRODUTO
+-- =========================
+CREATE TABLE PRODUTO (
+    id_produto INT PRIMARY KEY AUTO_INCREMENT,
+    nome_produto VARCHAR(100) NOT NULL,
+    descricao_produto TEXT,
+    categoria_produto VARCHAR(45),
+    preco_produto DECIMAL(10,2),
+    fornecedor_produto VARCHAR(45)
 );
 
--- senha: greg
--- INSERTS DE USUÁRIOS
--- ADM
-INSERT INTO usuarios(nome, email, senha, telefone, perfil)
-VALUES(
-	'Admin Greg', 
-    'greg@gmail.com', 
-    '$2a$10$bnVggkOhZQJP9ipjXWe01eztcGAB/T3ptXbA36MzwiAyAn6EkYaca', 
-    '2740028922', 
-    'administrador'
+-- =========================
+-- TABELA LOTE
+-- =========================
+CREATE TABLE LOTE (
+    id_lote INT PRIMARY KEY AUTO_INCREMENT,
+    id_produto INT NOT NULL,
+    data_validade DATE NOT NULL,
+    quantidade INT NOT NULL,
+    FOREIGN KEY (id_produto) REFERENCES PRODUTO(id_produto)
 );
 
--- OFERTANTE
-INSERT INTO usuarios(nome, email, senha, telefone, perfil)
-VALUES(
-	'João Ofertante', 
-    'ofertante@gmail.com', 
-    '$2a$10$bnVggkOhZQJP9ipjXWe01eztcGAB/T3ptXbA36MzwiAyAn6EkYaca', 
-    '2740028922', 
-    'ofertante'
+-- =========================
+-- TABELA MOVIMENTACAO_ESTOQUE
+-- =========================
+CREATE TABLE MOVIMENTACAO_ESTOQUE (
+    id_movimentacao INT PRIMARY KEY AUTO_INCREMENT,
+    id_usuario INT NOT NULL,
+    id_lote INT NOT NULL,
+    data_hora DATETIME NOT NULL,
+    tipo_movimentacao ENUM('ENTRADA', 'SAIDA') NOT NULL,
+    quantidade INT NOT NULL,
+    FOREIGN KEY (id_usuario) REFERENCES USUARIO(id_usuario),
+    FOREIGN KEY (id_lote) REFERENCES LOTE(id_lote)
 );
 
--- INTERESSADO
-INSERT INTO usuarios(nome, email, senha, telefone, perfil)
-VALUES(
-	'Bruce Interessado', 
-    'interessado@gmail.com', 
-    '$2a$10$bnVggkOhZQJP9ipjXWe01eztcGAB/T3ptXbA36MzwiAyAn6EkYaca', 
-    '2740028922', 
-    'interessado'
+-- =========================
+-- TABELA ALERTA_VALIDADE
+-- =========================
+CREATE TABLE ALERTA_VALIDADE (
+    id_alerta INT PRIMARY KEY AUTO_INCREMENT,
+    id_lote INT NOT NULL,
+    id_usuario INT NOT NULL,
+    data_alerta DATE NOT NULL,
+    tipo_alerta ENUM('PROXIMO_VENCIMENTO', 'VENCIDO') NOT NULL,
+    status_alerta ENUM('ATIVO', 'RESOLVIDO') DEFAULT 'ATIVO',
+    observacoes TEXT,
+    FOREIGN KEY (id_lote) REFERENCES LOTE(id_lote),
+    FOREIGN KEY (id_usuario) REFERENCES USUARIO(id_usuario)
 );
 
-
-
-
-
-
-
-	
+-- Usuários de teste (senha: 123456)
+INSERT INTO USUARIO (nome_usuario, email_usuario, senha_hash, id_perfil) VALUES
+(
+    'Admin LifeStock',
+    'admin@lifestock.com',
+    '$2b$10$xQEalAV.BOQCzyvfxAKs8.N1nXS/RKJEwtAWqOtEb6//ZkxQVgX7q',
+    2
+),
+(
+    'Funcionario Teste',
+    'funcionario@lifestock.com',
+    '$2b$10$xQEalAV.BOQCzyvfxAKs8.N1nXS/RKJEwtAWqOtEb6//ZkxQVgX7q',
+    1
+);

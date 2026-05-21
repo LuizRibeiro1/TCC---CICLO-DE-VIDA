@@ -1,55 +1,84 @@
-// importação do model
-const UsuarioModel = require("../models/usuarioModel.js")
-
-// importar pacotes
-// para criptrograffia
-const bcrypt = require('bcrypt')
-// para lidar com cookies
-const jwt = require('jsonwebtoken')
 const usuarioModel = require("../models/usuarioModel.js")
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 
 module.exports = {
-    //FUNÇÕES DE LOGIN
-    login: async (req,res) =>{
-        try{
-            // Pega as infomações das caixinhas da view, de acordo com o name delas
+    login: async (req, res) => {
+        try {
             const { email, senha } = req.body
-            
-            // Executa a função de busca no model
+
+            if (!email || !senha) {
+                return res.status(400).render('erro', { mensagem: "E-mail e senha são obrigatórios" })
+            }
+
             const usuario = await usuarioModel.buscarPorEmail(email)
-            // Se não existir, mensagem de erro
-            if (!usuario) return res.status(404).render('erro', { mensagem: "Credenciais inválidas"})
 
-            // compara a senha que o usuário digitou, com a senha do usuario retornado no banco
+            if (!usuario) {
+                return res.status(401).render('erro', { mensagem: "Credenciais inválidas" })
+            }
+
             const senhaValida = await bcrypt.compare(senha, usuario.senha)
-            // Se senhas não coincidirem, mensagem de erro
-            if (!senhaValida) return res.status(404).render('erro', { mensagem: "Credenciais inválidas"})
 
-            // Gera o token de acesso, contendo o perfil 
+            if (!senhaValida) {
+                return res.status(401).render('erro', { mensagem: "Credenciais inválidas" })
+            }
+
             const token = jwt.sign(
-                {id: usuario.id, perfil: usuario.perfil, nome: usuario.nome},
+                {
+                    id: usuario.id_usuario,
+                    perfil: usuario.perfil,
+                    nome: usuario.nome
+                },
                 process.env.JWT_SECRET,
-                {expiresIn: '2h'}       
+                { expiresIn: '2h' }
             )
 
-            // Guardar o token nos cookies do navegador
             res.cookie('token', token, { httpOnly: true })
 
-            // Redirecionamento de acordo com o perfil
-            if(usuario.perfil === "administrador") return res.redirect("/usuarios")
-            if(usuario.perfil === "ofertante") return res.redirect("/produtos/meus-produtos")
-            if(usuario.perfil === "interessado") return res.redirect("/produtos/vitrine")
-        }
-        catch(erro){
-            res.status(500).render('erro', { mensagem: "Erro interno no servidor"})
+            return res.redirect('/login?sucesso=1')
+        } catch (erro) {
+            console.error(erro)
+            res.status(500).render('erro', { mensagem: "Erro interno no servidor" })
         }
     },
 
-    logout: (req,res) =>{
-        //Limpa o token dos cookies
+    cadastrar: async (req, res) => {
+        try {
+            const { nome, email, senha, confirmar_senha } = req.body
+
+            if (!nome || !email || !senha || !confirmar_senha) {
+                return res.status(400).render('erro', { mensagem: "Preencha todos os campos obrigatórios" })
+            }
+
+            if (senha !== confirmar_senha) {
+                return res.status(400).render('erro', { mensagem: "As senhas não coincidem" })
+            }
+
+            if (senha.length < 6) {
+                return res.status(400).render('erro', { mensagem: "A senha deve ter no mínimo 6 caracteres" })
+            }
+
+            const usuarioExistente = await usuarioModel.buscarPorEmail(email)
+
+            if (usuarioExistente) {
+                return res.status(409).render('erro', { mensagem: "Este e-mail já está cadastrado" })
+            }
+
+            const senhaHash = await bcrypt.hash(senha, 10)
+            await usuarioModel.criarUsuario(nome.trim(), email.trim().toLowerCase(), senhaHash)
+
+            return res.redirect('/login?cadastro=1')
+        } catch (erro) {
+            console.error(erro)
+            if (erro.code === 'ER_DUP_ENTRY') {
+                return res.status(409).render('erro', { mensagem: "Este e-mail já está cadastrado" })
+            }
+            res.status(500).render('erro', { mensagem: "Erro interno no servidor" })
+        }
+    },
+
+    logout: (req, res) => {
         res.clearCookie('token')
-        // Volta pra tela de login
         res.redirect("/login")
     }
-
 }
