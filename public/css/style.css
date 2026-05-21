@@ -5,125 +5,176 @@
 }
 
 body{
-    background: #7b0000;
-
     height: 100vh;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
     font-family: Arial, Helvetica, sans-serif;
 }
 
 .container{
-    width: 100%;
-    max-width: 700px;
+    display: flex;
+    height: 100vh;
+}
 
-    text-align: center;
+/* LADO ESQUERDO */
+
+.left{
+    width: 50%;
+    background: #131f8f;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    color: white;
 }
 
 .logo{
-    margin-bottom: 40px;
+    text-align: center;
+    margin-bottom: 60px;
 }
 
-.logo img{
-    width: 90px;
+.telhado{
+    position: relative;
+
+    width: 220px;
+    height: 120px;
+
+    margin: auto;
+    margin-bottom: 10px;
 }
 
+.telhado::before{
+    content: '';
+
+    position: absolute;
+
+    width: 170px;
+    height: 16px;
+
+    background: white;
+
+    left: 0;
+    top: 40px;
+
+    transform: rotate(35deg);
+}
+
+.telhado::after{
+    content: '';
+
+    position: absolute;
+
+    width: 170px;
+    height: 16px;
+
+    background: white;
+
+    right: 0;
+    top: 40px;
+
+    transform: rotate(-35deg);
+}
 .logo h1{
-
-    color: white;
-
+    font-family: 'Patrick Hand', cursive;
     font-size: 65px;
-
-    font-family: 'Lobster', cursive;
-
-    text-shadow:
-        4px 4px 0px black,
-        7px 7px 10px rgba(0,0,0,0.6);
-
-    transform: rotate(-8deg);
-
-    margin-top: 10px;
+    line-height: 60px;
 }
 
-.box{
-
-    border: 2px solid rgba(255,255,255,0.7);
-
-    border-radius: 25px;
-
-    padding: 60px;
-
+.texto{
+    text-align: center;
+    margin-bottom: 60px;
 }
 
-.input-group{
-
-    text-align: left;
-
-    margin-bottom: 50px;
+.texto h2{
+    color: #ffe066;
+    font-size: 45px;
+    margin-bottom: 10px;
 }
 
-.input-group label{
+.texto p{
+    font-size: 20px;
+}
+
+/* BOTÕES */
+
+.buttons{
+    display: flex;
+    gap: 40px;
+}
+
+.buttons button{
+    width: 180px;
+    padding: 12px;
+
+    border: 2px solid white;
+    border-radius: 10px;
+
+    background: transparent;
 
     color: white;
 
     font-size: 22px;
-
-    display: block;
-
-    margin-bottom: 15px;
-}
-
-.input-group input{
-
-    width: 100%;
-
-    padding: 18px;
-
-    border-radius: 18px;
-
-    border: 2px solid rgba(255,255,255,0.8);
-
-    background: transparent;
-
-    outline: none;
-
-    color: white;
-
-    font-size: 18px;
-}
-
-.btn{
-
-    margin-top: 50px;
-}
-
-.btn button{
-
-    width: 220px;
-
-    padding: 16px;
-
-    border-radius: 18px;
-
-    border: 2px solid rgba(255,255,255,0.8);
-
-    background: transparent;
-
-    color: white;
-
-    font-size: 30px;
 
     cursor: pointer;
 
     transition: 0.3s;
 }
 
-.btn button:hover{
+.buttons button:hover{
+    background: white;
+    color: #131f8f;
+}
 
+/* LADO DIREITO */
+
+.right{
+    width: 50%;
     background: white;
 
-    color: #7b0000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-box{
+    width: 350px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+}
+
+.login-box input{
+    padding: 16px;
+
+    border: 2px solid #d8d8d8;
+    border-radius: 12px;
+
+    font-size: 20px;
+
+    outline: none;
+}
+
+.login-box button{
+    margin-top: 40px;
+
+    padding: 14px;
+
+    border: 2px solid #d8d8d8;
+    border-radius: 12px;
+
+    background: transparent;
+
+    color: #8b8b8b;
+
+    font-size: 22px;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+.login-box button:hover{
+    background: #131f8f;
+    color: white;
 }
