@@ -1,9 +1,9 @@
-/* CRIANDO UM DESIGN SYSTEM PARA O SISTEMA */
+/* CRIANDO UM DESING SYSTEM PARA O SISTEMA */
 /* Cores padrão do sistema são: Vermelho, branco e preto */
 /* IMPORTAÇÃO DAS FONTES DO PROJETO */
 @import url('https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
-/* CRIAÇÃO DAS VARIÁVEIS PARA UTILIZAÇÃO */
+/* CRIAÇÃO DAS VÁRIÁVEIS PARA UTILIZAÇÃO */
 :root{
     /* Cores base do sistema */
     --cor-fundo: #FFF;
@@ -11,7 +11,7 @@
     --cor-texto-inverso: #FFF;
     --cor-destaque: #FF0000;
     --cor-borda: #000;
-    --cor-menu: #000;
+    --cor-menu: #000; 
 
     /* outras configurações */
     --radius-padrao: 10px;
@@ -26,7 +26,7 @@ body{
     font-family: var(--fonte-principal);
     margin: 0;
     padding: 0;
-    /* FLEX NAS PÁGINA PARA FORÇAR O FOOTER PRO CHÃO */
+    /* FLEX NAS PÁGINAS PARA FORÇAR O FOOTER PRO CHÃO */
     display: flex;
     flex-direction: column;
     min-height: 100vh; /* FORÇA A PÁGINA A TER 100% DE ALTURA */
@@ -60,7 +60,7 @@ body{
 .nav-menu{
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 20px
 }
 
 /* CAIXA PRINCIPAL DO MAIN */
@@ -74,8 +74,72 @@ body{
 }
 /* estilo para as demais páginas */
 .container{
-    width: 10%;
+    width: 100%;
     max-width: 1200px;
     margin: 20px auto;
     padding: 20px;
+}
+
+
+/* PERSONALIZAÇÃO DOS BOTÕES E INPUTS */
+/* inputs dos formulários */
+.form-control{
+    width: 100%;
+    padding: 12px 8px;
+    border: 2px solid var(--cor-borda);
+    background-color: var(--cor-fundo);
+    color: var(--cor-texto-principal);
+    margin-bottom: 15px;
+    border-radius: var(--radius-padrao);
+    font-size: 16px; 
+}
+
+/* mudanças ao clicar no input */
+.form-control:focus{
+    outline: none;
+    border-color: var(--cor-destaque);
+}
+
+/* texto de apoio */
+label{
+    font-weight: bold;
+    font-size: 20px;
+}
+
+/* CSS DOS BOTÕES */
+.btn{
+    background-color: var(--cor-texto-principal);
+    color: var(--cor-texto-inverso);
+    border: 2px solid var(--cor-borda);
+    padding: 10px 20px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: var(--radius-padrao);
+    text-transform: uppercase;
+    transition: all 0.4s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+/* botão em destaque */
+.btn:hover{
+    background-color: var(--cor-destaque);
+    border-color: var(--cor-destaque);
+}
+
+/* CAIXINHA DE IMAGEM */
+.preview-container{
+    margin-top: 10px;
+    border: 1px solid var(--cor-destaque);
+    padding: 5px;
+    background-color: var(--cor-fundo);
+    text-align: center;
+    display: none;
+    border-radius: var(--radius-padrao);
+}
+
+.preview-container img{
+    max-width: 100%;
+    max-height: 250px;
+    object-fit: contain; /* Ajusta pra não distorcer a imagem*/
 }
