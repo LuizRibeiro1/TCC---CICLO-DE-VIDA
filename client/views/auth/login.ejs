@@ -1,56 +1,67 @@
-<!-- importa o header -->
-<%- include('../partials/header') %>
-    <main class="login-container">
-        <div class="card"
-            style="width: 100%; max-width: 400px; padding: 2rem; border: 2px solid var(--cor-borda); box-shadow: 6px 6px 0px var(--cor-borda); background-color: var(--cor-fundo);">
-            <div style="text-align: center; margin-bottom: 2rem;">
-                <i class="fa-solid fa-circle-user fa-4x" style="color: var(--cor-destaque); margin-bottom: 10px;"></i>
-                <h2 style="margin: 0;">LifeStock</h2>
-                <p style="color: var(--cor-texto-secundario); margin-top: 5px;">Faça login para continuar.</p>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeStock - Login</title>
+    <!-- Estilos da tela de autenticação (login e cadastro compartilham este arquivo) -->
+    <link rel="stylesheet" href="/css/login.css">
+    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+</head>
+<body class="login-page">
+
+    <div class="container">
+
+        <!-- Painel esquerdo: marca e navegação -->
+        <div class="left">
+            <div class="logo">
+                <h1>Life <br> Stock</h1>
             </div>
 
-            <% if (typeof sucesso !== 'undefined' && sucesso) { %>
-                <p style="background: #d4edda; color: #155724; padding: 10px; border-radius: 4px; margin-bottom: 1rem; text-align: center;">
-                    Login realizado com sucesso!
-                    <a href="/usuarios/logout" style="display: block; margin-top: 5px; color: #155724;">Sair</a>
+            <div class="texto">
+                <h2>Bem-vindo</h2>
+                <p>
+                    Acesse sua conta ou crie um novo <br>
+                    cadastro para começar a usar a plataforma.
                 </p>
-            <% } %>
+            </div>
 
-            <% if (typeof cadastro !== 'undefined' && cadastro) { %>
-                <p style="background: #d4edda; color: #155724; padding: 10px; border-radius: 4px; margin-bottom: 1rem; text-align: center;">
-                    Conta criada com sucesso! Faça login para entrar.
-                </p>
-            <% } %>
+            <div class="buttons">
+                <a href="/cadastro">CADASTRAR</a>
+                <!-- Botão visual apenas; indica que estamos na tela de login -->
+                <button type="button" class="btn-ativo">LOGIN</button>
+            </div>
+        </div>
 
-            <form action="/usuarios/login" method="POST">
-                <div class="form-group">
-                    <label for="email_login">
-                        <i class="fa-solid fa-envelope"></i> E-mail
-                    </label>
-                    <input type="email" id="email_login" name="email" class="form-control"
-                        placeholder="Seu e-mail cadastrado" required>
-                </div>
-                <div class="form-group">
-                    <label for="senha_login">
-                        <i class="fa-solid fa-lock"></i> Senha
-                    </label>
-                    <input type="password" id="senha_login" name="senha" class="form-control"
-                        placeholder="Sua senha secreta" required>
-                </div>
+        <!-- Painel direito: formulário enviado ao backend -->
+        <div class="right">
+            <form class="login-box" action="/usuarios/login" method="POST">
 
-                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px; font-size: 16px;">
-                    <i class="fa-solid fa-right-to-bracket"></i> Entrar
-                </button>
+                <% if (typeof sucesso !== 'undefined' && sucesso) { %>
+                    <!-- Exibido após login bem-sucedido (?sucesso=1 na URL) -->
+                    <div class="alerta alerta-sucesso">
+                        Login realizado com sucesso!
+                        <a href="/usuarios/logout">Sair</a>
+                    </div>
+                <% } %>
 
-                <div style="text-align: center; margin-top: 25px;">
-                    <a href="/cadastro"
-                        style="color: var(--cor-texto-principal); font-weight: bold; text-decoration: none;">
-                        Não tem uma conta? <span style="color: var(--cor-destaque); text-decoration: underline;">Crie
-                            aqui</span>
-                    </a>
-                </div>
+                <% if (typeof cadastro !== 'undefined' && cadastro) { %>
+                    <!-- Exibido após criar conta (?cadastro=1 na URL) -->
+                    <div class="alerta alerta-sucesso">
+                        Conta criada com sucesso! Faça login para entrar.
+                    </div>
+                <% } %>
 
+                <!-- name="email" e name="senha" devem coincidir com req.body no controller -->
+                <input type="email" name="email" placeholder="E-MAIL" required>
+
+                <input type="password" name="senha" placeholder="SENHA" required>
+
+                <button type="submit">ENTRAR</button>
             </form>
         </div>
 
-    </main>
+    </div>
+
+</body>
+</html>

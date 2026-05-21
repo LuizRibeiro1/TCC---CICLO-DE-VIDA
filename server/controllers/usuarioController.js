@@ -1,8 +1,14 @@
+// ============================================================
+// CONTROLLER DE USUÁRIO
+// Recebe requisições HTTP, valida dados e chama o model
+// ============================================================
+
 const usuarioModel = require("../models/usuarioModel.js")
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt')      // Criptografia de senha
+const jwt = require('jsonwebtoken')   // Token de sessão após login
 
 module.exports = {
+    // POST /usuarios/login — autentica e grava cookie com JWT
     login: async (req, res) => {
         try {
             const { email, senha } = req.body
@@ -17,12 +23,14 @@ module.exports = {
                 return res.status(401).render('erro', { mensagem: "Credenciais inválidas" })
             }
 
+            // Compara senha digitada com o hash salvo no banco
             const senhaValida = await bcrypt.compare(senha, usuario.senha)
 
             if (!senhaValida) {
                 return res.status(401).render('erro', { mensagem: "Credenciais inválidas" })
             }
 
+            // Gera token JWT com dados básicos do usuário (válido por 2 horas)
             const token = jwt.sign(
                 {
                     id: usuario.id_usuario,
@@ -33,6 +41,7 @@ module.exports = {
                 { expiresIn: '2h' }
             )
 
+            // Salva o token em cookie httpOnly (não acessível via JavaScript no navegador)
             res.cookie('token', token, { httpOnly: true })
 
             return res.redirect('/login?sucesso=1')
@@ -42,6 +51,7 @@ module.exports = {
         }
     },
 
+    // POST /usuarios/cadastrar — cria conta e redireciona para login
     cadastrar: async (req, res) => {
         try {
             const { nome, email, senha, confirmar_senha } = req.body
@@ -77,8 +87,23 @@ module.exports = {
         }
     },
 
+    // GET /usuarios/logout — remove o cookie e volta para o login
     logout: (req, res) => {
         res.clearCookie('token')
         res.redirect("/login")
+    },
+
+    // GET /usuarios — DEV: responde JSON com lista de usuários (Insomnia)
+    listar: async (req, res) => {
+        try {
+            const usuarios = await usuarioModel.listarTodos()
+            res.status(200).json({
+                total: usuarios.length,
+                usuarios
+            })
+        } catch (erro) {
+            console.error(erro)
+            res.status(500).json({ mensagem: "Erro ao buscar usuários" })
+        }
     }
 }

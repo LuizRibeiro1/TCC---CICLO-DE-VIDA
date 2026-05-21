@@ -1,78 +1,86 @@
-// importação e uso do módulo express
+// ============================================================
+// ARQUIVO PRINCIPAL DO SERVIDOR (LifeStock)
+// Configura o Express, rotas públicas e inicia o app após conectar ao MySQL
+// ============================================================
+
+// Importa o framework Express para criar o servidor HTTP
 const express = require("express");
 const app = express();
-// módulo do node para lidar com caminho de arquivos
+
+// Módulo nativo do Node para montar caminhos de pastas (views, arquivos estáticos)
 const path = require("path");
 
-// Importa o módulo do dotenv, lê o arquivo .env, e já configura inicialmente
+// Carrega variáveis do arquivo .env (PORT, DB_HOST, JWT_SECRET, etc.)
 require('dotenv').config()
 
-// Define a porta do servidor com base nas variáveis de ambiente
-// Se der errado, e porte será a 5000
+// Porta definida no .env; se não existir, usa 5000 como padrão
 const port = process.env.PORT || 5000;
 
-// MIDDLEWARE PARA ENTENDER O JSON
-// Lê os dados em JSON
-app.use(express.json()) 
-// Servidor está apto a ler os dados dos formulário
-app.use(express.urlencoded({ extended: true })) 
-// Permite ler cookies e alterar também
+// --- MIDDLEWARES GLOBAIS ---
+// Permite receber JSON no corpo das requisições (APIs, Insomnia)
+app.use(express.json())
+
+// Permite ler dados enviados por formulários HTML (login e cadastro)
+app.use(express.urlencoded({ extended: true }))
+
+// Permite gravar e ler cookies (token JWT após o login)
 app.use(require('cookie-parser')())
 
-// CONFIGURAÇÃO DO EJS E PASTAS DO FRONT END
-// Define o EJS como engine do front
+// --- CONFIGURAÇÃO DO FRONT-END (EJS + arquivos públicos) ---
+// Define EJS como motor de templates das páginas
 app.set("view engine", "ejs");
-// Aponta para o express e ejs onde estão as páginas
+
+// Informa ao Express onde ficam os arquivos .ejs
 app.set("views", path.join(__dirname, "../client/views"));
-// Deixa a pasta public acessível ao usuário
+
+// Expõe CSS, imagens e JS da pasta public (ex.: /css/login.css)
 app.use(express.static(path.join(__dirname, "../client/public")));
 
-// ROTAS PÚBLICAS
-// Criação de rotas padrão
+// --- ROTAS DE PÁGINAS (GET) ---
+// Raiz do site: redireciona sempre para a tela de login
 app.get("/", (req, res) => {
-  // Redireciona pra tela de login
   res.status(200).redirect("/login");
 });
 
-//Rota que retorna a página de login
+// Exibe a página de login (layout customizado em auth/login.ejs)
+// Passa flags da URL para mostrar mensagens de sucesso após login ou cadastro
 app.get("/login", (req, res) => {
   res.render('auth/login', {
-    sucesso: req.query.sucesso === '1',
-    cadastro: req.query.cadastro === '1'
+    sucesso: req.query.sucesso === '1',   // usuário logou com sucesso
+    cadastro: req.query.cadastro === '1'  // conta criada, pode fazer login
   });
 });
 
-// Rota que retorna a página de cadastro de usuário
+// Exibe a página de cadastro de novo usuário
 app.get("/cadastro", (req, res) => {
   res.render('auth/cadastro');
 });
 
-//Importar as rotas de usuário
+// --- ROTAS DE USUÁRIO (API + formulários) ---
 const usuariosRoutes = require("./routes/usuarioRoutes.js");
-// Requisições comecando com /usuarios é gerenciada pelo sub-arquivo de rotas
+const usuarioController = require("./controllers/usuarioController.js");
+
+// DEV: lista todos os usuários em JSON (testar no Insomnia com GET /usuarios)
+// Para desativar, comente a linha abaixo:
+app.get("/usuarios", usuarioController.listar);
+
+// Demais rotas de usuário: POST /usuarios/login, POST /usuarios/cadastrar, GET /usuarios/logout
 app.use("/usuarios", usuariosRoutes);
 
-// //Função para subir o servidor
-// app.listen(port, () => {
-//   console.log(`Servidor ativo na porta: ${port}`);
-//   console.log(`Link: http://localhost:${port}`);
-// });
-
-// Traz as configurações do banco
+// --- INICIALIZAÇÃO DO SERVIDOR ---
+// Só sobe o servidor depois de confirmar conexão com o MySQL
 const pool = require("./config/db.js");
-//Cria uma conexão teste com o banco
+
 (async () => {
   try {
-    // Se o banco de dados estiver ativo, ai sim o servidor será iniciado
     await pool.getConnection();
     console.log("Banco conectado");
-    // Se o banco de dados estiver ativo, ai sim o servidor será iniciado
+
     app.listen(port, () => {
       console.log(`Link: http://localhost:${port}`);
       console.log(`Servidor funcionando na porta ${port}`);
     });
   } catch (erro) {
-    // Se deu erro, avisa e encerra a tentativa
     console.log("Erro ao tentar conectar com o banco de dados");
     process.exit(1);
   }

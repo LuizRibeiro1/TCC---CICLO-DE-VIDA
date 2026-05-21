@@ -1,19 +1,20 @@
-// Importa o módulo mysql para conectar ao banco
+// ============================================================
+// CONFIGURAÇÃO DE CONEXÃO COM O MYSQL (LifeStock)
+// Cria um pool de conexões reutilizável para os models
+// ============================================================
+
 const mysql = require("mysql2/promise")
 
-// Cria uma pool de conexão, várias conexões de uma vez, para evitar erros no banco
+// Pool mantém várias conexões abertas para melhor desempenho
 const pool = mysql.createPool({
-    host: process.env.DB_HOST, // Onde o banco está hospedado
-    user: process.env.DB_USER, // Usuário que farà a conexão
-    password: process.env.DB_PASSWORD, // Senha do usuário
-    database: process.env.DB_NAME, // Banco ao qual deseja se conectar,
-    // Se todas conexões estiverem ocupadas, deixa o usuário esperando, sem dar erro
-    waitForConnections: true, 
-    // Quantidade máxima de conexões ao mesmo tempo
-    connectionLimit: 10,
-    // Máximo de lista de espera
-    queueLimit: 0 // 0 = ilimitado
+    host: process.env.DB_HOST,         // Ex.: localhost
+    user: process.env.DB_USER,         // Ex.: root
+    password: process.env.DB_PASSWORD, // Senha do MySQL (definida no .env)
+    database: process.env.DB_NAME,     // Ex.: LifeStock
+    waitForConnections: true,          // Aguarda se todas as conexões estiverem em uso
+    connectionLimit: 10,               // Máximo de conexões simultâneas
+    queueLimit: 0                      // 0 = fila de espera ilimitada
 })
 
-// Exporta as informações do banco, pros models utilizarem
+// Exportado para usuarioModel e outros models usarem db.execute()
 module.exports = pool;

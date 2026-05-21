@@ -1,3 +1,10 @@
+-- ============================================================
+-- SCRIPT DO BANCO LifeStock
+-- Execute no MySQL Workbench ou linha de comando para criar
+-- tabelas, perfis e usuários de teste do sistema
+-- ============================================================
+
+-- Remove o banco antigo (cuidado: apaga todos os dados)
 DROP DATABASE IF EXISTS LifeStock;
 
 CREATE DATABASE LifeStock;
@@ -79,7 +86,8 @@ CREATE TABLE ALERTA_VALIDADE (
     FOREIGN KEY (id_usuario) REFERENCES USUARIO(id_usuario)
 );
 
--- Usuários de teste (senha: 123456)
+-- Usuários de teste para login (senha em texto: 123456)
+-- senha_hash foi gerada com bcrypt no Node
 INSERT INTO USUARIO (nome_usuario, email_usuario, senha_hash, id_perfil) VALUES
 (
     'Admin LifeStock',

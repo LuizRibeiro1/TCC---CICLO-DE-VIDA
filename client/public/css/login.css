@@ -1,0 +1,201 @@
+/* ============================================================
+   ESTILOS DAS TELAS DE LOGIN E CADASTRO (LifeStock)
+   Baseado nos arquivos index.html e telaCadastro.html
+   ============================================================ */
+
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Página ocupa a altura total da tela */
+body.login-page {
+    height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Layout em duas colunas (esquerda azul + direita branca) */
+.login-page .container {
+    display: flex;
+    height: 100vh;
+}
+
+/* --- COLUNA ESQUERDA --- */
+.login-page .left {
+    width: 50%;
+    background: #131f8f;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+.login-page .logo {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.login-page .logo h1 {
+    font-family: 'Patrick Hand', cursive;
+    font-size: 100px;
+    line-height: 100px;
+}
+
+.login-page .texto {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.login-page .texto h2 {
+    color: #ffe066;
+    font-size: 45px;
+    margin-bottom: 10px;
+}
+
+.login-page .texto p {
+    font-size: 20px;
+}
+
+/* Botões de navegação entre login e cadastro */
+.login-page .buttons {
+    display: flex;
+    gap: 40px;
+}
+
+.login-page .buttons a,
+.login-page .buttons button {
+    width: 180px;
+    padding: 12px;
+    border: 2px solid white;
+    border-radius: 10px;
+    background: transparent;
+    color: white;
+    font-size: 22px;
+    cursor: pointer;
+    transition: 0.3s;
+    text-decoration: none;
+    text-align: center;
+    display: inline-block;
+}
+
+.login-page .buttons a:hover,
+.login-page .buttons button:hover {
+    background: white;
+    color: #131f8f;
+}
+
+/* Destaca o botão da tela atual (não clicável) */
+.login-page .buttons .btn-ativo {
+    background: white;
+    color: #131f8f;
+    pointer-events: none;
+}
+
+/* --- COLUNA DIREITA (formulário) --- */
+.login-page .right {
+    width: 50%;
+    background: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-page .login-box {
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+}
+
+/* Mensagens de sucesso após login ou cadastro */
+.login-page .alerta {
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 16px;
+    text-align: center;
+}
+
+.login-page .alerta-sucesso {
+    background: #d4edda;
+    color: #155724;
+    border: 2px solid #b8dfc4;
+}
+
+.login-page .alerta-sucesso a {
+    display: block;
+    margin-top: 8px;
+    color: #155724;
+    font-weight: bold;
+}
+
+.login-page .login-box input {
+    padding: 16px;
+    border: 2px solid #d8d8d8;
+    border-radius: 12px;
+    font-size: 20px;
+    outline: none;
+    width: 100%;
+}
+
+.login-page .login-box button[type="submit"] {
+    margin-top: 40px;
+    padding: 14px;
+    border: 2px solid #d8d8d8;
+    border-radius: 12px;
+    background: transparent;
+    color: #8b8b8b;
+    font-size: 22px;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 100%;
+}
+
+.login-page .login-box button[type="submit"]:hover {
+    background: #131f8f;
+    color: white;
+    border-color: #131f8f;
+}
+
+/* --- ESTILOS EXTRAS DA PÁGINA DE CADASTRO --- */
+.cadastro-page .logo h4 {
+    font-family: 'Patrick Hand', cursive;
+    font-size: 36px;
+    color: #ffe066;
+    margin-top: 10px;
+    letter-spacing: 2px;
+}
+
+.cadastro-page .texto p {
+    font-size: 22px;
+    line-height: 1.4;
+}
+
+/* --- RESPONSIVO: empilha colunas em telas menores --- */
+@media (max-width: 900px) {
+    .login-page .container {
+        flex-direction: column;
+        height: auto;
+        min-height: 100vh;
+    }
+
+    .login-page .left,
+    .login-page .right {
+        width: 100%;
+    }
+
+    .login-page .left {
+        padding: 40px 20px;
+    }
+
+    .login-page .logo h1 {
+        font-size: 64px;
+        line-height: 64px;
+    }
+
+    .login-page .right {
+        padding: 40px 20px;
+    }
+}
