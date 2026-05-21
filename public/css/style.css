@@ -76,9 +76,11 @@ body{
 }
 .logo h1{
     font-family: 'Patrick Hand', cursive;
-    font-size: 65px;
-    line-height: 60px;
+    font-size: 100px;
+    line-height: 100px;
 }
+
+
 
 .texto{
     text-align: center;
