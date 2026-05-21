@@ -1,0 +1,129 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    background: #7b0000;
+
+    height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.container{
+    width: 100%;
+    max-width: 700px;
+
+    text-align: center;
+}
+
+.logo{
+    margin-bottom: 40px;
+}
+
+.logo img{
+    width: 90px;
+}
+
+.logo h1{
+
+    color: white;
+
+    font-size: 65px;
+
+    font-family: 'Lobster', cursive;
+
+    text-shadow:
+        4px 4px 0px black,
+        7px 7px 10px rgba(0,0,0,0.6);
+
+    transform: rotate(-8deg);
+
+    margin-top: 10px;
+}
+
+.box{
+
+    border: 2px solid rgba(255,255,255,0.7);
+
+    border-radius: 25px;
+
+    padding: 60px;
+
+}
+
+.input-group{
+
+    text-align: left;
+
+    margin-bottom: 50px;
+}
+
+.input-group label{
+
+    color: white;
+
+    font-size: 22px;
+
+    display: block;
+
+    margin-bottom: 15px;
+}
+
+.input-group input{
+
+    width: 100%;
+
+    padding: 18px;
+
+    border-radius: 18px;
+
+    border: 2px solid rgba(255,255,255,0.8);
+
+    background: transparent;
+
+    outline: none;
+
+    color: white;
+
+    font-size: 18px;
+}
+
+.btn{
+
+    margin-top: 50px;
+}
+
+.btn button{
+
+    width: 220px;
+
+    padding: 16px;
+
+    border-radius: 18px;
+
+    border: 2px solid rgba(255,255,255,0.8);
+
+    background: transparent;
+
+    color: white;
+
+    font-size: 30px;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+.btn button:hover{
+
+    background: white;
+
+    color: #7b0000;
+}
