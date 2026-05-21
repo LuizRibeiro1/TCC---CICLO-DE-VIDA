@@ -1,0 +1,18 @@
+# 1. Inicie o repositório Git local (caso ainda não tenha iniciado)
+git init
+
+# 2. Adicione todos os seus arquivos ao histórico do Git
+git add .
+
+# 3. Crie o seu primeiro commit
+git commit -m "Primeiro commit"
+
+# 4. Defina a branch principal como 'main' (padrão do GitHub)
+git branch -M main
+
+# 5. Vincule a sua pasta local ao repositório externo do GitHub
+# (Substitua a URL pela URL do seu repositório)
+git remote add origin https://github.com/seu-usuario/seu-repositorio.git
+
+# 6. Envie os arquivos locais para o GitHub pela primeira vez
+git push -u origin main
