@@ -1,0 +1,27 @@
+Quando eu fiz as implemenações do banco de dados e dos outros krl a quatro aí
+eu usei a ia Cursor.ai.
+
+Ela é de graça e pode conectar direto no repositorio e fazer as alterações no geral,
+porém a versão gratuita só permite um sistema por vez. 
+E ela é toda em inglês.
+
+DETALHES PARA O SISTEMA
+
+- ABRA O TERMINAL NA PASTA SERVER
+
+- npm i PARA BAIXAR OS ARQUIVOS E PACOTES
+
+- CRIE O ARQUIVO .ENV COM ISSO AQUI:
+
+PORT=3000
+
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=usbw
+DB_NAME=LifeStock
+
+JWT_SECRET=lifestock_jwt_secret
+
+
+
+GG guys, usem esse arquivo para deixar mensagens e instruções (resenha tbm:])
