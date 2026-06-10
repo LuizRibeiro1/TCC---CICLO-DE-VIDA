@@ -1,0 +1,6 @@
+Test document — repository sync check
+
+Created: 2026-06-10
+Purpose: Verify that new modifications are correctly reaching the repository.
+
+Status: OK
