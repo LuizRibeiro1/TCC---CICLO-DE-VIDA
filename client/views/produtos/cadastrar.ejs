@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeStock - Novo Produto</title>
+    <link rel="stylesheet" href="/css/login.css">
+    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+</head>
+<body class="login-page cadastro-page">
+
+    <div class="container">
+
+        <div class="left">
+            <div class="logo">
+                <h1>Life Stock</h1>
+            </div>
+
+            <div class="texto">
+                <h2>Novo produto</h2>
+                <p>
+                    Cadastre um produto e o lote inicial <br>
+                    para incluir no controle de estoque.
+                </p>
+            </div>
+
+            <div class="buttons">
+                <button type="button" class="btn-ativo">CADASTRAR</button>
+                <a href="/home">VOLTAR</a>
+            </div>
+        </div>
+
+        <div class="right">
+            <form class="login-box" action="/produtos/cadastrar" method="POST">
+
+                <input type="text" id="nome" name="nome" placeholder="NOME DO PRODUTO" maxlength="100" required>
+
+                <input type="text" id="categoria" name="categoria" placeholder="CATEGORIA" maxlength="45" required>
+
+                <input type="number" id="quantidade" name="quantidade" placeholder="QUANTIDADE" min="1" required>
+
+                <input type="date" id="validade" name="validade" required>
+
+                <input type="text" id="fornecedor" name="fornecedor" placeholder="FORNECEDOR (opcional)" maxlength="45">
+
+                <input type="number" id="preco" name="preco" placeholder="PREÇO (opcional)" min="0" step="0.01">
+
+                <textarea id="descricao" name="descricao" placeholder="DESCRIÇÃO (opcional)" rows="3" style="padding:16px;border:2px solid #d8d8d8;border-radius:12px;font-size:18px;resize:vertical;"></textarea>
+
+                <button type="submit" class="btn">CADASTRAR PRODUTO</button>
+
+            </form>
+        </div>
+
+    </div>
+
+</body>
+</html>

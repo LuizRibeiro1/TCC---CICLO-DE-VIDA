@@ -37,14 +37,6 @@
         <div class="right">
             <form class="login-box" action="/usuarios/login" method="POST">
 
-                <% if (typeof sucesso !== 'undefined' && sucesso) { %>
-                    <!-- Exibido após login bem-sucedido (?sucesso=1 na URL) -->
-                    <div class="alerta alerta-sucesso">
-                        Login realizado com sucesso!
-                        <a href="/usuarios/logout">Sair</a>
-                    </div>
-                <% } %>
-
                 <% if (typeof cadastro !== 'undefined' && cadastro) { %>
                     <!-- Exibido após criar conta (?cadastro=1 na URL) -->
                     <div class="alerta alerta-sucesso">

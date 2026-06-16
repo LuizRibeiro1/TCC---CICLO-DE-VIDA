@@ -37,16 +37,15 @@ app.set("views", path.join(__dirname, "../client/views"));
 app.use(express.static(path.join(__dirname, "../client/public")));
 
 // --- ROTAS DE PÁGINAS (GET) ---
-// Raiz do site: redireciona sempre para a tela de login
+// Raiz do site: redireciona para login ou dashboard
 app.get("/", (req, res) => {
   res.status(200).redirect("/login");
 });
 
 // Exibe a página de login (layout customizado em auth/login.ejs)
-// Passa flags da URL para mostrar mensagens de sucesso após login ou cadastro
+// Passa flags da URL para mostrar mensagens de sucesso após cadastro
 app.get("/login", (req, res) => {
   res.render('auth/login', {
-    sucesso: req.query.sucesso === '1',   // usuário logou com sucesso
     cadastro: req.query.cadastro === '1'  // conta criada, pode fazer login
   });
 });
@@ -59,13 +58,21 @@ app.get("/cadastro", (req, res) => {
 // --- ROTAS DE USUÁRIO (API + formulários) ---
 const usuariosRoutes = require("./routes/usuarioRoutes.js");
 const usuarioController = require("./controllers/usuarioController.js");
+const homeRoutes = require("./routes/homeRoutes.js");
+const produtoRoutes = require("./routes/produtoRoutes.js");
 
 // DEV: lista todos os usuários em JSON (testar no Insomnia com GET /usuarios)
 // Para desativar, comente a linha abaixo:
 app.get("/usuarios", usuarioController.listar);
 
+// Página principal do estoque
+app.use("/", homeRoutes);
+
 // Demais rotas de usuário: POST /usuarios/login, POST /usuarios/cadastrar, GET /usuarios/logout
 app.use("/usuarios", usuariosRoutes);
+
+// Rotas de produto: GET/POST /produtos/cadastrar
+app.use("/produtos", produtoRoutes);
 
 // --- INICIALIZAÇÃO DO SERVIDOR ---
 // Só sobe o servidor depois de confirmar conexão com o MySQL
