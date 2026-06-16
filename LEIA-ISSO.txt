@@ -1,9 +1,3 @@
-Quando eu fiz as implemenações do banco de dados e dos outros krl a quatro aí
-eu usei a ia Cursor.ai.
-
-Ela é de graça e pode conectar direto no repositorio e fazer as alterações no geral,
-porém a versão gratuita só permite um sistema por vez. 
-E ela é toda em inglês.
 
 DETALHES PARA O SISTEMA
 
@@ -22,6 +16,7 @@ DB_NAME=LifeStock
 
 JWT_SECRET=lifestock_jwt_secret
 
-
+- ABRS O WORKBENCH E COPIE O DATABASE NELE
+- UTILIZE O USB WEB SERVER PARA ATIVAR A LIGAÇÃO ENTRE SERVIDOR E SISTEMA
 
 GG guys, usem esse arquivo para deixar mensagens e instruções (resenha tbm:])
