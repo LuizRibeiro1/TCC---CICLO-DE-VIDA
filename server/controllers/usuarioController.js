@@ -41,8 +41,8 @@ module.exports = {
                 { expiresIn: '2h' }
             )
 
-            // Salva o token em cookie httpOnly (não acessível via JavaScript no navegador)
-            res.cookie('token', token, { httpOnly: true })
+            // Salva o token em cookie httpOnly e garante o path raiz para o redirect funcionar em /home
+            res.cookie('token', token, { httpOnly: true, path: '/' })
 
             return res.redirect('/home')
         } catch (erro) {
@@ -89,7 +89,7 @@ module.exports = {
 
     // GET /usuarios/logout — remove o cookie e volta para o login
     logout: (req, res) => {
-        res.clearCookie('token')
+        res.clearCookie('token', { path: '/' })
         res.redirect("/login")
     },
 
@@ -162,7 +162,7 @@ module.exports = {
                 { expiresIn: '2h' }
             )
 
-            res.cookie('token', token, { httpOnly: true })
+            res.cookie('token', token, { httpOnly: true, path: '/' })
 
             return res.redirect('/usuarios/editar?sucesso=1')
         } catch (erro) {
