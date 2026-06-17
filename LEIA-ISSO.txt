@@ -20,3 +20,4 @@ JWT_SECRET=lifestock_jwt_secret
 - UTILIZE O USB WEB SERVER PARA ATIVAR A LIGAÇÃO ENTRE SERVIDOR E SISTEMA
 
 GG guys, usem esse arquivo para deixar mensagens e instruções (resenha tbm:])
+paia
