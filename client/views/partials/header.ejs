@@ -1,35 +1,36 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TROCA APP</title>
+<header class="dashboard-header">
+  <div class="header-left">
+    <a href="/home" class="header-icon-btn" title="Início">
+      <i class="fa-solid fa-house"></i>
+    </a>
+    <a href="#" class="header-icon-btn" title="Ferramentas">
+      <i class="fa-solid fa-screwdriver-wrench"></i>
+    </a>
+  </div>
 
-    <!-- IMPORTAÇÃO DO FONT AWESOME -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
+  <div class="header-logo">
+    <span class="logo-leaf"><i class="fa-solid fa-leaf"></i></span>
+    <h1>LifeStock</h1>
+  </div>
 
-    <!-- IMPORTAÇÃO DO BOOTSTRAP -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
-      crossorigin="anonymous"
-    />
+  <div class="header-right">
+    <div class="header-user">
+      <div class="header-user-avatar">
+        <i class="fa-solid fa-user"></i>
+      </div>
+      <span>
+        <% if (typeof usuario !== 'undefined' && usuario.perfil) { %>
+          <%= usuario.perfil === 'ADMINISTRADOR' ? 'Administrador' : 'Funcionário' %>
+        <% } %>
+      </span>
 
-    <!-- IMPORTAÇÃO DO CSS -->
-    <link rel="stylesheet" href="/css/style.css" />
-  </head>
-  <body>
-    <header class="header-sistema">
-      <!-- Logo do site, na esquerda -->
-      <a href="/">
-        <img src="/img/logo2horizontalss.png" alt="logo" width="240" height="70" />
-      </a>
-      <!-- Opções de menu, na direita -->
-      <nav class="nav-menu"></nav>
-    </header>
-  </body>
-</html>
+      <% if (typeof usuario !== 'undefined' && usuario.perfil === 'ADMINISTRADOR') { %>
+        <a href="/usuarios/gerenciar" class="btn-editar-usuario">Gerenciar usuários</a>
+      <% } %>
+    </div>
+
+    <a href="/usuarios/logout" class="header-icon-btn" title="Sair">
+      <i class="fa-solid fa-right-from-bracket"></i>
+    </a>
+  </div>
+</header>

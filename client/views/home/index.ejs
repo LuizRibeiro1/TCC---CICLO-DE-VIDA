@@ -25,13 +25,13 @@
         </div>
 
         <div class="header-right">
-            <div class="header-user">
+                <div class="header-user">
                 <div class="header-user-avatar">
                     <i class="fa-solid fa-user"></i>
                 </div>
                 <span><%= ehAdmin ? 'Administrador' : 'Funcionário' %></span>
                 <% if (ehAdmin) { %>
-                    <a href="/usuarios/editar" class="btn-editar-usuario">Editar usuário</a>
+                    <a href="/usuarios/gerenciar" class="btn-editar-usuario">Gerenciar usuários</a>
                 <% } %>
             </div>
             <a href="/usuarios/logout" class="header-icon-btn" title="Sair">
@@ -41,134 +41,11 @@
     </header>
 
     <main class="dashboard-main">
-        <div class="toolbar">
-            <form action="/home" method="GET">
-                <label class="toolbar-input">
-                    <i class="fa-solid fa-filter"></i>
-                    <select name="filtro">
-                        <option value="" <%= filtro === '' ? 'selected' : '' %>>Filtros</option>
-                        <option value="proximo" <%= filtro === 'proximo' ? 'selected' : '' %>>Próximo da validade</option>
-                        <option value="vencido" <%= filtro === 'vencido' ? 'selected' : '' %>>Vencidos</option>
-                        <option value="em_dia" <%= filtro === 'em_dia' ? 'selected' : '' %>>Em dia</option>
-                    </select>
-                </label>
-
-                <label class="toolbar-input">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" name="busca" placeholder="Pesquisar" value="<%= busca %>">
-                </label>
-
-                <button type="submit" class="btn-novo-produto" style="background:#4a6cf7;">
-                    <i class="fa-solid fa-search"></i> BUSCAR
-                </button>
-            </form>
-
-            <a href="/produtos/cadastrar" class="btn-novo-produto">
-                <i class="fa-solid fa-plus"></i> NOVO PRODUTO
-            </a>
-        </div>
-
-        <section class="resumo-grid">
-            <article class="resumo-card azul">
-                <div>
-                    <h3>PRODUTOS EM ESTOQUE</h3>
-                    <div class="numero"><%= resumo.total_estoque || 0 %></div>
-                </div>
-                <i class="fa-solid fa-box"></i>
-            </article>
-
-            <article class="resumo-card laranja">
-                <div>
-                    <h3>PRÓXIMO DA VALIDADE</h3>
-                    <div class="numero"><%= resumo.proximo_validade || 0 %></div>
-                </div>
-                <i class="fa-solid fa-clock"></i>
-            </article>
-
-            <article class="resumo-card vermelho">
-                <div>
-                    <h3>PRODUTOS VENCIDOS</h3>
-                    <div class="numero"><%= resumo.vencidos || 0 %></div>
-                </div>
-                <i class="fa-solid fa-triangle-exclamation"></i>
-            </article>
-
-            <div class="movimentacao-box">
-                <a href="#">ENTRADA</a>
-                <a href="#">SAÍDA</a>
+        <div class="container">
+            <div style="padding:60px 0;text-align:center;color:#7b879c;font-size:18px;">
+                Conteúdo principal temporariamente desabilitado.
             </div>
-        </section>
-
-        <section class="tabela-container">
-            <table class="tabela-estoque">
-                <thead>
-                    <tr>
-                        <th>Produto</th>
-                        <th>Lote</th>
-                        <th>Categoria</th>
-                        <th>Quantidade</th>
-                        <th>Validade</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% if (produtos.length === 0) { %>
-                        <tr>
-                            <td colspan="6" class="tabela-vazia">Nenhum produto encontrado.</td>
-                        </tr>
-                    <% } else { %>
-                        <% produtos.forEach(function(item) { %>
-                            <tr>
-                                <td>
-                                    <div class="produto-cell">
-                                        <span class="produto-icon"><i class="fa-solid fa-box"></i></span>
-                                        <%= item.nome_produto %>
-                                    </div>
-                                </td>
-                                <td><%= item.lote_formatado %></td>
-                                <td><%= item.categoria_produto %></td>
-                                <td><span class="quantidade-link"><%= item.quantidade %></span></td>
-                                <td class="validade-cell">
-                                    <%= item.validade_formatada %>
-                                    <span class="validade-relativa status-<%= item.status_classe.replace('status-', '') %>-text">
-                                        (<%= item.validade_relativa %>)
-                                    </span>
-                                </td>
-                                <td>
-                                    <span class="status-badge <%= item.status_classe %>"><%= item.status_label %></span>
-                                </td>
-                            </tr>
-                        <% }) %>
-                    <% } %>
-                </tbody>
-            </table>
-
-            <% if (totalPaginas > 1) { %>
-                <nav class="paginacao">
-                    <% if (pagina > 1) { %>
-                        <a href="/home?pagina=<%= pagina - 1 %>&busca=<%= busca %>&filtro=<%= filtro %>">
-                            <i class="fa-solid fa-chevron-left"></i>
-                        </a>
-                    <% } %>
-
-                    <% for (let i = 1; i <= totalPaginas; i++) { %>
-                        <% if (i === pagina) { %>
-                            <span class="ativa"><%= i %></span>
-                        <% } else if (i === 1 || i === totalPaginas || Math.abs(i - pagina) <= 1) { %>
-                            <a href="/home?pagina=<%= i %>&busca=<%= busca %>&filtro=<%= filtro %>"><%= i %></a>
-                        <% } else if (i === pagina - 2 || i === pagina + 2) { %>
-                            <span>...</span>
-                        <% } %>
-                    <% } %>
-
-                    <% if (pagina < totalPaginas) { %>
-                        <a href="/home?pagina=<%= pagina + 1 %>&busca=<%= busca %>&filtro=<%= filtro %>">
-                            <i class="fa-solid fa-chevron-right"></i>
-                        </a>
-                    <% } %>
-                </nav>
-            <% } %>
-        </section>
+        </div>
     </main>
 
 </body>

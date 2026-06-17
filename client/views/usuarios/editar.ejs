@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeStock - Editar Usuário (Admin)</title>
+    <link rel="stylesheet" href="/css/login.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+</head>
+<body class="login-page cadastro-page">
+
+    <div class="container">
+
+        <div class="left">
+            <div class="logo">
+                <h1>Life Stock</h1>
+            </div>
+
+            <div class="texto">
+                <h2>Editar usuário</h2>
+                <p>
+                    Atualize os dados do usuário selecionado.
+                </p>
+            </div>
+
+            <div class="buttons">
+                <button type="button" class="btn-ativo">EDITAR</button>
+                <a href="/usuarios/gerenciar">VOLTAR</a>
+                <a href="/home">VOLTAR AO DASHBOARD</a>
+            </div>
+        </div>
+
+        <div class="right">
+            <form class="login-box" action="/usuarios/<%= usuarioEd.id_usuario %>/atualizar" method="POST">
+
+                <input class="form-control" type="text" name="nome" value="<%= usuarioEd.nome %>" placeholder="NOME COMPLETO" required maxlength="65">
+
+                <input class="form-control" type="email" name="email" value="<%= usuarioEd.email %>" placeholder="E-MAIL" required maxlength="65">
+
+                <input class="form-control" type="password" name="senha" placeholder="NOVA SENHA (opcional)" minlength="6">
+
+                <input class="form-control" type="password" name="confirmar_senha" placeholder="CONFIRMAR NOVA SENHA" minlength="6">
+
+                <label>Perfil</label>
+                <select name="perfil" class="form-control">
+                    <option value="1" <%= usuarioEd.id_perfil === 1 ? 'selected' : '' %>>Funcionário</option>
+                    <option value="2" <%= usuarioEd.id_perfil === 2 ? 'selected' : '' %>>Administrador</option>
+                </select>
+
+                <button type="submit" class="btn">SALVAR</button>
+
+            </form>
+        </div>
+
+    </div>
+
+</body>
+</html>

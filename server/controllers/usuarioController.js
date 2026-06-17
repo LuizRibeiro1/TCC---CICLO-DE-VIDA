@@ -7,6 +7,9 @@ const usuarioModel = require("../models/usuarioModel.js")
 const bcrypt = require('bcrypt')      // Criptografia de senha
 const jwt = require('jsonwebtoken')   // Token de sessão após login
 
+// útil para páginas administrativas
+const ID_PERFIL_ADMIN = 2
+
 module.exports = {
     // POST /usuarios/login — autentica e grava cookie com JWT
     login: async (req, res) => {
@@ -185,6 +188,143 @@ module.exports = {
         } catch (erro) {
             console.error(erro)
             res.status(500).json({ mensagem: "Erro ao buscar usuários" })
+        }
+    }
+
+    ,
+
+    // --- Ações administrativas (somente ADMIN via rotas protegidas) ---
+    // GET /usuarios/gerenciar — lista usuários (view)
+    gerenciar: async (req, res) => {
+        try {
+            const usuarios = await usuarioModel.listarTodos()
+            return res.render('usuarios/gerenciar', {
+                usuario: req.usuario,
+                usuarios,
+                ehAdmin: req.usuario.perfil === 'ADMINISTRADOR'
+            })
+        } catch (erro) {
+            console.error(erro)
+            res.status(500).render('erro', { mensagem: 'Erro ao carregar usuários' })
+        }
+    },
+
+    // GET /usuarios/novo — formulário de criação pelo admin
+    exibirNovo: (req, res) => {
+        res.render('usuarios/novo', { usuario: req.usuario })
+    },
+
+    // POST /usuarios/novo — cria usuário com perfil escolhido
+    novo: async (req, res) => {
+        try {
+            const { nome, email, senha, confirmar_senha, perfil } = req.body
+
+            if (!nome || !email || !senha || !confirmar_senha || !perfil) {
+                return res.status(400).render('erro', { mensagem: 'Preencha todos os campos obrigatórios' })
+            }
+
+            if (senha !== confirmar_senha) {
+                return res.status(400).render('erro', { mensagem: 'As senhas não coincidem' })
+            }
+
+            if (senha.length < 6) {
+                return res.status(400).render('erro', { mensagem: 'A senha deve ter no mínimo 6 caracteres' })
+            }
+
+            const emailNormalizado = email.trim().toLowerCase()
+            const existente = await usuarioModel.buscarPorEmail(emailNormalizado)
+            if (existente) {
+                return res.status(409).render('erro', { mensagem: 'Este e-mail já está cadastrado' })
+            }
+
+            const senhaHash = await bcrypt.hash(senha, 10)
+            const idPerfil = parseInt(perfil, 10) === ID_PERFIL_ADMIN ? ID_PERFIL_ADMIN : 1
+            await usuarioModel.criarUsuarioComPerfil(nome.trim(), emailNormalizado, senhaHash, idPerfil)
+
+            return res.redirect('/usuarios/gerenciar')
+        } catch (erro) {
+            console.error(erro)
+            res.status(500).render('erro', { mensagem: 'Erro ao criar usuário' })
+        }
+    },
+
+    // GET /usuarios/:id/editar — formulário de edição pelo admin
+    exibirEditarPorId: async (req, res) => {
+        try {
+            const id = parseInt(req.params.id, 10)
+            const usuarioEd = await usuarioModel.buscarPorId(id)
+            if (!usuarioEd) {
+                return res.status(404).render('erro', { mensagem: 'Usuário não encontrado' })
+            }
+            return res.render('usuarios/editar', { usuario: req.usuario, usuarioEd })
+        } catch (erro) {
+            console.error(erro)
+            res.status(500).render('erro', { mensagem: 'Erro ao carregar usuário' })
+        }
+    },
+
+    // POST /usuarios/:id/atualizar — atualiza usuário pelo admin
+    atualizarPorId: async (req, res) => {
+        try {
+            const id = parseInt(req.params.id, 10)
+            const { nome, email, senha, confirmar_senha, perfil } = req.body
+
+            if (!nome || !email) {
+                return res.status(400).render('erro', { mensagem: 'Nome e e-mail são obrigatórios' })
+            }
+
+            const usuarioAtual = await usuarioModel.buscarPorId(id)
+            if (!usuarioAtual) {
+                return res.status(404).render('erro', { mensagem: 'Usuário não encontrado' })
+            }
+
+            const emailNormalizado = email.trim().toLowerCase()
+            if (emailNormalizado !== usuarioAtual.email) {
+                const emailEmUso = await usuarioModel.buscarPorEmail(emailNormalizado)
+                if (emailEmUso && emailEmUso.id_usuario !== id) {
+                    return res.status(409).render('erro', { mensagem: 'Este e-mail já está cadastrado' })
+                }
+            }
+
+            if (senha || confirmar_senha) {
+                if (senha !== confirmar_senha) {
+                    return res.status(400).render('erro', { mensagem: 'As senhas não coincidem' })
+                }
+                if (senha.length < 6) {
+                    return res.status(400).render('erro', { mensagem: 'A senha deve ter no mínimo 6 caracteres' })
+                }
+                const senhaHash = await bcrypt.hash(senha, 10)
+                await usuarioModel.atualizarSenha(id, senhaHash)
+            }
+
+            await usuarioModel.atualizarUsuario(id, nome.trim(), emailNormalizado)
+
+            // Atualiza perfil se foi passado (somente 1 ou 2)
+            const novoPerfil = parseInt(perfil, 10)
+            if (novoPerfil === 1 || novoPerfil === 2) {
+                const query = `UPDATE USUARIO SET id_perfil = ? WHERE id_usuario = ?`
+                await require('../config/db.js').execute(query, [novoPerfil, id])
+            }
+
+            return res.redirect('/usuarios/gerenciar')
+        } catch (erro) {
+            console.error(erro)
+            res.status(500).render('erro', { mensagem: 'Erro ao atualizar usuário' })
+        }
+    },
+
+    // POST /usuarios/:id/excluir — exclui usuário
+    excluir: async (req, res) => {
+        try {
+            const id = parseInt(req.params.id, 10)
+            if (id === req.usuario.id) {
+                return res.status(400).render('erro', { mensagem: 'Administrador não pode excluir a si mesmo' })
+            }
+            await usuarioModel.excluirUsuario(id)
+            return res.redirect('/usuarios/gerenciar')
+        } catch (erro) {
+            console.error(erro)
+            res.status(500).render('erro', { mensagem: 'Erro ao excluir usuário' })
         }
     }
 }

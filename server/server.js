@@ -59,20 +59,19 @@ app.get("/cadastro", (req, res) => {
 const usuariosRoutes = require("./routes/usuarioRoutes.js");
 const usuarioController = require("./controllers/usuarioController.js");
 const homeRoutes = require("./routes/homeRoutes.js");
-const produtoRoutes = require("./routes/produtoRoutes.js");
+// const produtoRoutes = require("./routes/produtoRoutes.js");
 
+// Mantém apenas endpoints relacionados a usuário
 // DEV: lista todos os usuários em JSON (testar no Insomnia com GET /usuarios)
-// Para desativar, comente a linha abaixo:
 app.get("/usuarios", usuarioController.listar);
 
-// Página principal do estoque
+// Página principal (mantida) — o conteúdo abaixo do header será desativado via view
 app.use("/", homeRoutes);
 
-// Demais rotas de usuário: POST /usuarios/login, POST /usuarios/cadastrar, GET /usuarios/logout
+// Rotas de usuário: POST /usuarios/login, POST /usuarios/cadastrar, GET /usuarios/logout
 app.use("/usuarios", usuariosRoutes);
 
-// Rotas de produto: GET/POST /produtos/cadastrar
-app.use("/produtos", produtoRoutes);
+// app.use("/produtos", produtoRoutes);
 
 // --- INICIALIZAÇÃO DO SERVIDOR ---
 // Só sobe o servidor depois de confirmar conexão com o MySQL
