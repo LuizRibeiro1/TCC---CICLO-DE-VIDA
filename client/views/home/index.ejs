@@ -1,50 +1,15 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeStock - Estoque</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="/css/dashboard.css">
+    <%- include('../partials/head', { titulo: 'LifeStock - Estoque' }) %>
 </head>
 <body class="dashboard-page">
 
-    <header class="dashboard-header">
-        <div class="header-left">
-            <a href="/home" class="header-icon-btn" title="Início">
-                <i class="fa-solid fa-house"></i>
-            </a>
-            <a href="#" class="header-icon-btn" title="Ferramentas">
-                <i class="fa-solid fa-screwdriver-wrench"></i>
-            </a>
-        </div>
-
-        <div class="header-logo">
-            <span class="logo-leaf"><i class="fa-solid fa-leaf"></i></span>
-            <h1>LifeStock</h1>
-        </div>
-
-        <div class="header-right">
-                <div class="header-user">
-                <div class="header-user-avatar">
-                    <i class="fa-solid fa-user"></i>
-                </div>
-                <span><%= ehAdmin ? 'Administrador' : 'Funcionário' %></span>
-                <% if (ehAdmin) { %>
-                    <a href="/usuarios/gerenciar" class="btn-editar-usuario">Gerenciar usuários</a>
-                <% } %>
-            </div>
-            <a href="/usuarios/logout" class="header-icon-btn" title="Sair">
-                <i class="fa-solid fa-right-from-bracket"></i>
-            </a>
-        </div>
-    </header>
+    <%- include('../partials/header') %>
 
     <main class="dashboard-main">
-        <div class="container">
-            <div style="padding:60px 0;text-align:center;color:#7b879c;font-size:18px;">
-                Conteúdo principal temporariamente desabilitado.
-            </div>
+        <div style="padding:60px 0;text-align:center;color:#7b879c;font-size:18px;">
+            Conteúdo principal temporariamente desabilitado.
         </div>
     </main>
 

@@ -1,14 +1,25 @@
-<!-- Página genérica de erro (login inválido, cadastro com falha, etc.) -->
-<%- include('partials/header') %>
-<main class="login-container">
-    <div class="card"
-        style="width: 100%; max-width: 400px; padding: 2rem; border: 2px solid var(--cor-borda); box-shadow: 6px 6px 0px var(--cor-borda); background-color: var(--cor-fundo); text-align: center;">
-        <i class="fa-solid fa-triangle-exclamation fa-3x" style="color: var(--cor-destaque); margin-bottom: 1rem;"></i>
-        <h2>Ops!</h2>
-        <!-- mensagem vem do controller: res.render('erro', { mensagem: '...' }) -->
-        <p style="margin: 1rem 0;"><%= mensagem %></p>
-        <a href="/login" class="btn btn-primary">Voltar ao login</a>
-        <a href="/cadastro" class="btn btn-secondary" style="margin-top: 10px; display: inline-block;">Ir para cadastro</a>
-    </div>
-</main>
-<%- include('partials/footer') %>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <%- include('partials/head', { titulo: 'LifeStock - Erro' }) %>
+</head>
+<body class="dashboard-page">
+
+    <%- include('partials/header') %>
+
+    <main class="dashboard-main">
+        <div class="erro-container">
+            <div class="erro-card">
+                <i class="fa-solid fa-triangle-exclamation erro-icon"></i>
+                <h2>Ops!</h2>
+                <p><%= mensagem %></p>
+                <div class="erro-acoes">
+                    <a href="/login" class="btn-novo-produto">Voltar ao login</a>
+                    <a href="/cadastro" class="btn-secondary-action">Ir para cadastro</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>

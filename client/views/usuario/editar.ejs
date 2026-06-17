@@ -1,37 +1,18 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeStock - Editar Usuário</title>
-    <link rel="stylesheet" href="/css/login.css">
-    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+    <%- include('../partials/head', { titulo: 'LifeStock - Editar Perfil' }) %>
 </head>
-<body class="login-page cadastro-page">
+<body class="dashboard-page">
 
-    <div class="container">
+    <%- include('../partials/header') %>
 
-        <div class="left">
-            <div class="logo">
-                <h1>Life Stock</h1>
-            </div>
+    <main class="dashboard-main">
+        <h1 class="form-page-title">Meu perfil</h1>
+        <p class="form-page-subtitle">Atualize seus dados ou altere sua senha de acesso.</p>
 
-            <div class="texto">
-                <h2>Perfil</h2>
-                <p>
-                    Atualize seus dados de administrador <br>
-                    ou altere sua senha de acesso.
-                </p>
-            </div>
-
-            <div class="buttons">
-                <button type="button" class="btn-ativo">EDITAR</button>
-                <a href="/home">VOLTAR</a>
-            </div>
-        </div>
-
-        <div class="right">
-            <form class="login-box" action="/usuarios/atualizar" method="POST">
+        <div class="form-card">
+            <form action="/usuarios/atualizar" method="POST">
 
                 <% if (typeof sucesso !== 'undefined' && sucesso) { %>
                     <div class="alerta alerta-sucesso">
@@ -39,20 +20,34 @@
                     </div>
                 <% } %>
 
-                <input type="text" id="nome" name="nome" placeholder="NOME COMPLETO" maxlength="65" value="<%= usuario.nome %>" required>
+                <div class="form-group">
+                    <label for="nome">Nome completo</label>
+                    <input class="form-control" type="text" id="nome" name="nome" maxlength="65" value="<%= usuario.nome %>" required>
+                </div>
 
-                <input type="email" id="email" name="email" placeholder="E-MAIL" maxlength="65" value="<%= usuario.email %>" required>
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input class="form-control" type="email" id="email" name="email" maxlength="65" value="<%= usuario.email %>" required>
+                </div>
 
-                <input type="password" id="senha" name="senha" placeholder="NOVA SENHA (opcional)" minlength="6">
+                <div class="form-group">
+                    <label for="senha">Nova senha (opcional)</label>
+                    <input class="form-control" type="password" id="senha" name="senha" minlength="6">
+                </div>
 
-                <input type="password" id="confirmar_senha" name="confirmar_senha" placeholder="CONFIRMAR NOVA SENHA" minlength="6">
+                <div class="form-group">
+                    <label for="confirmar_senha">Confirmar nova senha</label>
+                    <input class="form-control" type="password" id="confirmar_senha" name="confirmar_senha" minlength="6">
+                </div>
 
-                <button type="submit" class="btn">SALVAR ALTERAÇÕES</button>
+                <div class="form-actions">
+                    <button type="submit" class="btn-novo-produto">Salvar alterações</button>
+                    <a href="/home" class="btn-secondary-action">Voltar</a>
+                </div>
 
             </form>
         </div>
-
-    </div>
+    </main>
 
 </body>
 </html>

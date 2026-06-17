@@ -1,60 +1,56 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeStock - Editar Usuário (Admin)</title>
-    <link rel="stylesheet" href="/css/login.css">
-    <link rel="stylesheet" href="/css/dashboard.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+    <%- include('../partials/head', { titulo: 'LifeStock - Editar Usuário (Admin)' }) %>
 </head>
-<body class="login-page cadastro-page">
+<body class="dashboard-page">
 
-    <div class="container">
+    <%- include('../partials/header') %>
 
-        <div class="left">
-            <div class="logo">
-                <h1>Life Stock</h1>
-            </div>
+    <main class="dashboard-main">
+        <h1 class="form-page-title">Editar usuário</h1>
+        <p class="form-page-subtitle">Atualize os dados do usuário selecionado.</p>
 
-            <div class="texto">
-                <h2>Editar usuário</h2>
-                <p>
-                    Atualize os dados do usuário selecionado.
-                </p>
-            </div>
+        <div class="form-card">
+            <form action="/usuarios/<%= usuarioEd.id_usuario %>/atualizar" method="POST">
 
-            <div class="buttons">
-                <button type="button" class="btn-ativo">EDITAR</button>
-                <a href="/usuarios/gerenciar">VOLTAR</a>
-                <a href="/home">VOLTAR AO DASHBOARD</a>
-            </div>
-        </div>
+                <div class="form-group">
+                    <label for="nome">Nome completo</label>
+                    <input class="form-control" type="text" id="nome" name="nome" value="<%= usuarioEd.nome %>" required maxlength="65">
+                </div>
 
-        <div class="right">
-            <form class="login-box" action="/usuarios/<%= usuarioEd.id_usuario %>/atualizar" method="POST">
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input class="form-control" type="email" id="email" name="email" value="<%= usuarioEd.email %>" required maxlength="65">
+                </div>
 
-                <input class="form-control" type="text" name="nome" value="<%= usuarioEd.nome %>" placeholder="NOME COMPLETO" required maxlength="65">
+                <div class="form-group">
+                    <label for="senha">Nova senha (opcional)</label>
+                    <input class="form-control" type="password" id="senha" name="senha" minlength="6">
+                </div>
 
-                <input class="form-control" type="email" name="email" value="<%= usuarioEd.email %>" placeholder="E-MAIL" required maxlength="65">
+                <div class="form-group">
+                    <label for="confirmar_senha">Confirmar nova senha</label>
+                    <input class="form-control" type="password" id="confirmar_senha" name="confirmar_senha" minlength="6">
+                </div>
 
-                <input class="form-control" type="password" name="senha" placeholder="NOVA SENHA (opcional)" minlength="6">
+                <div class="form-group">
+                    <label for="perfil">Perfil</label>
+                    <select id="perfil" name="perfil" class="form-control">
+                        <option value="1" <%= usuarioEd.id_perfil === 1 ? 'selected' : '' %>>Funcionário</option>
+                        <option value="2" <%= usuarioEd.id_perfil === 2 ? 'selected' : '' %>>Administrador</option>
+                    </select>
+                </div>
 
-                <input class="form-control" type="password" name="confirmar_senha" placeholder="CONFIRMAR NOVA SENHA" minlength="6">
-
-                <label>Perfil</label>
-                <select name="perfil" class="form-control">
-                    <option value="1" <%= usuarioEd.id_perfil === 1 ? 'selected' : '' %>>Funcionário</option>
-                    <option value="2" <%= usuarioEd.id_perfil === 2 ? 'selected' : '' %>>Administrador</option>
-                </select>
-
-                <button type="submit" class="btn">SALVAR</button>
+                <div class="form-actions">
+                    <button type="submit" class="btn-novo-produto">Salvar</button>
+                    <a href="/usuarios/gerenciar" class="btn-secondary-action">Voltar</a>
+                    <a href="/home" class="btn-secondary-action">Voltar ao dashboard</a>
+                </div>
 
             </form>
         </div>
-
-    </div>
+    </main>
 
 </body>
 </html>

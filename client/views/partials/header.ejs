@@ -14,23 +14,29 @@
   </div>
 
   <div class="header-right">
-    <div class="header-user">
-      <div class="header-user-avatar">
-        <i class="fa-solid fa-user"></i>
-      </div>
-      <span>
-        <% if (typeof usuario !== 'undefined' && usuario.perfil) { %>
-          <%= usuario.perfil === 'ADMINISTRADOR' ? 'Administrador' : 'Funcionário' %>
+    <% if (typeof usuario !== 'undefined' && usuario) { %>
+      <div class="header-user">
+        <div class="header-user-avatar">
+          <i class="fa-solid fa-user"></i>
+        </div>
+        <span>
+          <% if (usuario.perfil) { %>
+            <%= usuario.perfil === 'ADMINISTRADOR' ? 'Administrador' : 'Funcionário' %>
+          <% } %>
+        </span>
+
+        <% if (usuario.perfil === 'ADMINISTRADOR') { %>
+          <a href="/usuarios/gerenciar" class="btn-editar-usuario">Gerenciar usuários</a>
         <% } %>
-      </span>
+      </div>
 
-      <% if (typeof usuario !== 'undefined' && usuario.perfil === 'ADMINISTRADOR') { %>
-        <a href="/usuarios/gerenciar" class="btn-editar-usuario">Gerenciar usuários</a>
-      <% } %>
-    </div>
-
-    <a href="/usuarios/logout" class="header-icon-btn" title="Sair">
-      <i class="fa-solid fa-right-from-bracket"></i>
-    </a>
+      <a href="/usuarios/logout" class="header-icon-btn" title="Sair">
+        <i class="fa-solid fa-right-from-bracket"></i>
+      </a>
+    <% } else { %>
+      <a href="/login" class="header-icon-btn" title="Login">
+        <i class="fa-solid fa-right-to-bracket"></i>
+      </a>
+    <% } %>
   </div>
 </header>

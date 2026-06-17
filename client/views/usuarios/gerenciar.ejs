@@ -1,15 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeStock - Gerenciar Usuários</title>
-    <link rel="stylesheet" href="/css/dashboard.css">
+    <%- include('../partials/head', { titulo: 'LifeStock - Gerenciar Usuários' }) %>
 </head>
 <body class="dashboard-page">
+
     <%- include('../partials/header') %>
 
-    <div class="dashboard-main">
+    <main class="dashboard-main">
         <div class="toolbar">
             <a href="/usuarios/novo" class="btn-novo-produto"><i class="fa-solid fa-plus"></i> Novo Usuário</a>
         </div>
@@ -38,10 +36,12 @@
                                 <td><%= u.email_usuario || u.email %></td>
                                 <td><%= u.nome_perfil || u.perfil %></td>
                                 <td>
-                                    <a href="/usuarios/<%= u.id_usuario %>/editar" class="btn" style="background:#4a6cf7;border:none;margin-right:8px;padding:8px 12px">Editar</a>
-                                    <form action="/usuarios/<%= u.id_usuario %>/excluir" method="POST" style="display:inline" onsubmit="return confirm('Confirma exclusão deste usuário?')">
-                                        <button type="submit" class="btn" style="background:#e74c3c;border:none;margin-left:8px;padding:8px 12px">Excluir</button>
-                                    </form>
+                                    <div class="acoes-cell">
+                                        <a href="/usuarios/<%= u.id_usuario %>/editar" class="btn-acao btn-acao-editar">Editar</a>
+                                        <form action="/usuarios/<%= u.id_usuario %>/excluir" method="POST" onsubmit="return confirm('Confirma exclusão deste usuário?')">
+                                            <button type="submit" class="btn-acao btn-acao-excluir">Excluir</button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         <% }) %>
@@ -49,6 +49,7 @@
                 </tbody>
             </table>
         </section>
-    </div>
+    </main>
+
 </body>
 </html>

@@ -4,17 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LifeStock - Cadastro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/css/login.css">
-    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
 </head>
-<!-- Classe cadastro-page ativa estilos extras do título "CADASTRO" -->
 <body class="login-page cadastro-page">
 
     <div class="container">
 
         <div class="left">
             <div class="logo">
-                <h1>Life Stock</h1>
+                <span class="logo-leaf"><i class="fa-solid fa-leaf"></i></span>
+                <h1>LifeStock</h1>
             </div>
 
             <div class="texto">
@@ -32,18 +32,14 @@
         </div>
 
         <div class="right">
-            <!-- POST para /usuarios/cadastrar; campos validados no usuarioController -->
             <form class="login-box" action="/usuarios/cadastrar" method="POST">
 
                 <input type="text" id="nome" name="nome" placeholder="NOME COMPLETO" maxlength="65" required>
-
                 <input type="email" id="email" name="email" placeholder="E-MAIL" maxlength="65" required>
-
                 <input type="password" id="senha" name="senha" placeholder="SENHA" minlength="6" required>
-
                 <input type="password" id="confirmar_senha" name="confirmar_senha" placeholder="CONFIRMAR SENHA" minlength="6" required>
 
-                <button type="submit" class="btn">CADASTRAR</button>
+                <button type="submit">CADASTRAR</button>
 
             </form>
         </div>

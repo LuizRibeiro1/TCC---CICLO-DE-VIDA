@@ -1,58 +1,62 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeStock - Novo Produto</title>
-    <link rel="stylesheet" href="/css/login.css">
-    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+    <%- include('../partials/head', { titulo: 'LifeStock - Novo Produto' }) %>
 </head>
-<body class="login-page cadastro-page">
+<body class="dashboard-page">
 
-    <div class="container">
+    <%- include('../partials/header') %>
 
-        <div class="left">
-            <div class="logo">
-                <h1>Life Stock</h1>
-            </div>
+    <main class="dashboard-main">
+        <h1 class="form-page-title">Novo produto</h1>
+        <p class="form-page-subtitle">Cadastre um produto e o lote inicial para incluir no controle de estoque.</p>
 
-            <div class="texto">
-                <h2>Novo produto</h2>
-                <p>
-                    Cadastre um produto e o lote inicial <br>
-                    para incluir no controle de estoque.
-                </p>
-            </div>
+        <div class="form-card">
+            <form action="/produtos/cadastrar" method="POST">
 
-            <div class="buttons">
-                <button type="button" class="btn-ativo">CADASTRAR</button>
-                <a href="/home">VOLTAR</a>
-            </div>
-        </div>
+                <div class="form-group">
+                    <label for="nome">Nome do produto</label>
+                    <input class="form-control" type="text" id="nome" name="nome" maxlength="100" required>
+                </div>
 
-        <div class="right">
-            <form class="login-box" action="/produtos/cadastrar" method="POST">
+                <div class="form-group">
+                    <label for="categoria">Categoria</label>
+                    <input class="form-control" type="text" id="categoria" name="categoria" maxlength="45" required>
+                </div>
 
-                <input type="text" id="nome" name="nome" placeholder="NOME DO PRODUTO" maxlength="100" required>
+                <div class="form-group">
+                    <label for="quantidade">Quantidade</label>
+                    <input class="form-control" type="number" id="quantidade" name="quantidade" min="1" required>
+                </div>
 
-                <input type="text" id="categoria" name="categoria" placeholder="CATEGORIA" maxlength="45" required>
+                <div class="form-group">
+                    <label for="validade">Validade</label>
+                    <input class="form-control" type="date" id="validade" name="validade" required>
+                </div>
 
-                <input type="number" id="quantidade" name="quantidade" placeholder="QUANTIDADE" min="1" required>
+                <div class="form-group">
+                    <label for="fornecedor">Fornecedor (opcional)</label>
+                    <input class="form-control" type="text" id="fornecedor" name="fornecedor" maxlength="45">
+                </div>
 
-                <input type="date" id="validade" name="validade" required>
+                <div class="form-group">
+                    <label for="preco">Preço (opcional)</label>
+                    <input class="form-control" type="number" id="preco" name="preco" min="0" step="0.01">
+                </div>
 
-                <input type="text" id="fornecedor" name="fornecedor" placeholder="FORNECEDOR (opcional)" maxlength="45">
+                <div class="form-group">
+                    <label for="descricao">Descrição (opcional)</label>
+                    <textarea class="form-control" id="descricao" name="descricao" rows="3"></textarea>
+                </div>
 
-                <input type="number" id="preco" name="preco" placeholder="PREÇO (opcional)" min="0" step="0.01">
-
-                <textarea id="descricao" name="descricao" placeholder="DESCRIÇÃO (opcional)" rows="3" style="padding:16px;border:2px solid #d8d8d8;border-radius:12px;font-size:18px;resize:vertical;"></textarea>
-
-                <button type="submit" class="btn">CADASTRAR PRODUTO</button>
+                <div class="form-actions">
+                    <button type="submit" class="btn-novo-produto">Cadastrar produto</button>
+                    <a href="/home" class="btn-secondary-action">Voltar</a>
+                </div>
 
             </form>
         </div>
-
-    </div>
+    </main>
 
 </body>
 </html>
