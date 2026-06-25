@@ -48,6 +48,7 @@ CREATE TABLE PRODUTO (
 );
 
 -- =========================
+-- TABELA LOTE
 -- =========================
 CREATE TABLE LOTE (
     id_lote INT PRIMARY KEY AUTO_INCREMENT,
@@ -102,7 +103,6 @@ INSERT INTO USUARIO (nome_usuario, email_usuario, senha_hash, id_perfil) VALUES
     1
 );
 
--- =========================
 -- =========================
 -- DADOS DE EXEMPLO — PRODUTOS E LOTES
 -- Um produto por status de validade (vencido, próximo, em dia)
