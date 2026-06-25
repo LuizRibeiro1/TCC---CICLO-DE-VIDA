@@ -99,8 +99,11 @@
                                 <% if (ehAdmin) { %>
                                     <td>
                                         <div class="acoes-cell">
-                                            <!-- Ações futuras: editar / excluir -->
-                                            <a href="#" class="btn-acao btn-acao-editar">Editar</a>
+                                            <a href="/produtos/<%= p.id_produto %>/movimentar" class="btn-acao btn-acao-editar">Movimentar</a>
+                                            <a href="/produtos/<%= p.id_produto %>/editar" class="btn-acao btn-acao-editar">Editar</a>
+                                            <form action="/produtos/<%= p.id_produto %>/desativar" method="POST" style="display:inline;" onsubmit="return confirm('Deseja desativar este produto?');">
+                                                <button type="submit" class="btn-acao btn-acao-excluir">Desativar</button>
+                                            </form>
                                         </div>
                                     </td>
                                 <% } %>
