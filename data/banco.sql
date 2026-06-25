@@ -43,7 +43,8 @@ CREATE TABLE PRODUTO (
     descricao_produto TEXT,
     categoria_produto VARCHAR(45),
     preco_produto DECIMAL(10,2),
-    fornecedor_produto VARCHAR(45)
+    fornecedor_produto VARCHAR(45),
+    ativo TINYINT(1) NOT NULL DEFAULT 1
 );
 
 -- =========================
@@ -104,47 +105,24 @@ INSERT INTO USUARIO (nome_usuario, email_usuario, senha_hash, id_perfil) VALUES
 
 -- =========================
 -- DADOS DE EXEMPLO — PRODUTOS E LOTES
+-- Um produto por status de validade (vencido, próximo, em dia)
+-- As datas dos lotes são calculadas em relação à data atual (CURDATE)
 -- =========================
 INSERT INTO PRODUTO (nome_produto, descricao_produto, categoria_produto, preco_produto, fornecedor_produto) VALUES
-('Refrigerante', 'Refrigerante cola 2L', 'Bebidas', 8.50, 'Distribuidora Sul'),
-('Mercearia A', 'Itens diversos de mercearia', 'Mercearia', 12.00, 'Atacado Central'),
-('Pão de Forma', 'Pão de forma tradicional 500g', 'Padaria', 6.90, 'Padaria Bom Dia'),
-('Arroz branco 5kg', 'Arroz tipo 1 pacote 5kg', 'Mercearia', 24.90, 'Atacado Central'),
-('Leite integral 1L', 'Leite UHT integral', 'Laticínios', 5.20, 'Laticínios Vale'),
-('Iogurte natural', 'Iogurte natural 170g', 'Laticínios', 3.80, 'Laticínios Vale'),
-('Suco de laranja', 'Suco integral 900ml', 'Bebidas', 9.50, 'Distribuidora Sul'),
-('Biscoito recheado', 'Biscoito recheado chocolate', 'Mercearia', 2.50, 'Atacado Central'),
-('Queijo mussarela', 'Queijo mussarela fatiado 150g', 'Laticínios', 8.90, 'Laticínios Vale'),
-('Água mineral 500ml', 'Água mineral sem gás', 'Bebidas', 2.00, 'Distribuidora Sul'),
-('Macarrão espaguete', 'Macarrão espaguete 500g', 'Mercearia', 4.50, 'Atacado Central'),
-('Café torrado 500g', 'Café torrado e moído', 'Mercearia', 18.90, 'Atacado Central'),
-('Manteiga 200g', 'Manteiga com sal', 'Laticínios', 7.50, 'Laticínios Vale'),
-('Salgadinho', 'Salgadinho de milho 120g', 'Mercearia', 3.20, 'Atacado Central'),
-('Refrigerante zero', 'Refrigerante cola zero 2L', 'Bebidas', 8.90, 'Distribuidora Sul'),
-('Pão francês (un)', 'Pão francês unidade', 'Padaria', 0.80, 'Padaria Bom Dia'),
-('Achocolatado', 'Achocolatado em pó 400g', 'Mercearia', 11.50, 'Atacado Central'),
-('Suco de uva', 'Suco de uva integral 900ml', 'Bebidas', 10.50, 'Distribuidora Sul'),
-('Margarina 500g', 'Margarina cremosa', 'Laticínios', 6.80, 'Laticínios Vale'),
-('Feijão carioca 1kg', 'Feijão carioca tipo 1', 'Mercearia', 7.90, 'Atacado Central');
+('Leite integral 1L', 'Leite UHT integral — validade vencida', 'Laticínios', 5.20, 'Laticínios Vale'),
+('Iogurte natural', 'Iogurte natural 170g — próximo da validade', 'Laticínios', 3.80, 'Laticínios Vale'),
+('Arroz branco 5kg', 'Arroz tipo 1 pacote 5kg — validade em dia', 'Mercearia', 24.90, 'Atacado Central');
 
 INSERT INTO LOTE (id_produto, data_validade, quantidade) VALUES
-(1, '2026-06-21', 41),
-(2, '2026-06-18', 2),
-(3, '2026-06-17', 93),
-(4, '2026-05-15', 15),
-(5, '2027-03-01', 120),
-(6, '2026-06-19', 35),
-(7, '2026-06-20', 28),
-(8, '2027-01-15', 200),
-(9, '2026-06-16', 18),
-(10, '2027-06-01', 300),
-(11, '2027-02-10', 85),
-(12, '2027-04-20', 42),
-(13, '2026-06-22', 22),
-(14, '2027-01-05', 150),
-(15, '2026-06-18', 55),
-(16, '2026-06-16', 200),
-(17, '2027-05-12', 60),
-(18, '2026-06-21', 33),
-(19, '2026-06-20', 47),
-(20, '2027-08-30', 90);
+(1, DATE_SUB(CURDATE(), INTERVAL 15 DAY), 12),
+(2, DATE_ADD(CURDATE(), INTERVAL 5 DAY), 28),
+(3, DATE_ADD(CURDATE(), INTERVAL 60 DAY), 70);
+
+-- ============================================================
+-- MIGRAÇÃO (banco já existente sem coluna ativo)
+-- Execute apenas se a tabela PRODUTO não tiver a coluna ativo:
+-- ALTER TABLE PRODUTO ADD COLUMN ativo TINYINT(1) NOT NULL DEFAULT 1;
+--
+-- ZERAR MOVIMENTAÇÕES (reiniciar contadores do dashboard):
+-- DELETE FROM MOVIMENTACAO_ESTOQUE;
+-- ============================================================
