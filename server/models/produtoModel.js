@@ -15,7 +15,6 @@ module.exports = {
         const offset = (pagina - 1) * porPagina
         const params = []
         let where = 'WHERE p.ativo = 1'
-        let where = 'WHERE p.ativo = 1'
 
         if (busca.trim()) {
             where += ' AND (p.nome_produto LIKE ? OR p.categoria_produto LIKE ?)'
@@ -82,8 +81,6 @@ module.exports = {
                     WHEN l.data_validade < CURDATE()
                     THEN 1 ELSE 0 END) AS vencidos
             FROM LOTE l
-            INNER JOIN PRODUTO p ON p.id_produto = l.id_produto
-            WHERE p.ativo = 1
             INNER JOIN PRODUTO p ON p.id_produto = l.id_produto
             WHERE p.ativo = 1
         `
