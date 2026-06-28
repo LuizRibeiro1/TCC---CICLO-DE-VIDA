@@ -286,15 +286,5 @@ module.exports = {
             console.error(erro)
             return res.status(500).render('erro', { mensagem: erro.message || 'Erro ao registrar movimentação' })
         }
-    },
-
-    desativar: async (req, res) => {
-        try {
-            await produtoModel.desativarProduto(req.params.id)
-            return res.redirect('/home')
-        } catch (erro) {
-            console.error(erro)
-            return res.status(500).render('erro', { mensagem: 'Erro ao desativar produto' })
-        }
     }
 }
