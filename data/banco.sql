@@ -1,3 +1,4 @@
+
 -- ============================================================
 -- SCRIPT DO BANCO LifeStock
 -- Execute no MySQL Workbench ou linha de comando para criar

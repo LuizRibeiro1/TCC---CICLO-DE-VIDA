@@ -1,1 +1,52 @@
-<!-- eu não estou usando essa merda -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <%- include('../partials/head', { titulo: 'LifeStock - Editar Produto' }) %>
+</head>
+<body class="dashboard-page">
+
+    <%- include('../partials/header') %>
+
+    <main class="dashboard-main">
+        <h1 class="form-page-title">Modificar produto</h1>
+        <p class="form-page-subtitle">Atualize as informações do produto selecionado.</p>
+
+        <div class="form-card">
+            <form action="/produtos/<%= produto.id_produto %>/atualizar" method="POST">
+
+                <div class="form-group">
+                    <label for="nome">Nome do produto</label>
+                    <input class="form-control" type="text" id="nome" name="nome" maxlength="100" value="<%= produto.nome_produto %>" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="categoria">Categoria</label>
+                    <input class="form-control" type="text" id="categoria" name="categoria" maxlength="45" value="<%= produto.categoria_produto %>" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="fornecedor">Fornecedor (opcional)</label>
+                    <input class="form-control" type="text" id="fornecedor" name="fornecedor" maxlength="45" value="<%= produto.fornecedor_produto || '' %>">
+                </div>
+
+                <div class="form-group">
+                    <label for="preco">Preço (opcional)</label>
+                    <input class="form-control" type="number" id="preco" name="preco" min="0" step="0.01" value="<%= produto.preco_produto || '' %>">
+                </div>
+
+                <div class="form-group">
+                    <label for="descricao">Descrição (opcional)</label>
+                    <textarea class="form-control" id="descricao" name="descricao" rows="3"><%= produto.descricao_produto || '' %></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-novo-produto">Salvar alterações</button>
+                    <a href="/home" class="btn-secondary-action">Voltar</a>
+                </div>
+
+            </form>
+        </div>
+    </main>
+
+</body>
+</html>
