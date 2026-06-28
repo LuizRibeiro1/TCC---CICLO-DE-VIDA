@@ -1,6 +1,6 @@
 // ============================================================
 // CONTROLLER DE MOVIMENTAÇÃO
-// Entrada e saída de estoque
+// Entrada, saída e reset de estoque
 // ============================================================
 
 const movimentacaoModel = require("../models/movimentacaoModel.js")
@@ -22,15 +22,13 @@ const montarFormulario = async (req, res, tipo) => {
             validade_formatada: formatarData(lote.data_validade)
         }))
 
-        const idLotePreSelecionado = req.query.lote || ''
-
         return res.render('movimentacao/formulario', {
             usuario: req.usuario,
             ehAdmin: req.usuario.perfil === 'ADMINISTRADOR',
             tipo,
             titulo: tipo === 'ENTRADA' ? 'Entrada de estoque' : 'Saída de estoque',
             lotes: lotesFormatados,
-            idLotePreSelecionado,
+            idLotePreSelecionado: req.query.lote || '',
             erro: null
         })
     } catch (erro) {
@@ -41,7 +39,6 @@ const montarFormulario = async (req, res, tipo) => {
 
 module.exports = {
     exibirEntrada: (req, res) => montarFormulario(req, res, 'ENTRADA'),
-
     exibirSaida: (req, res) => montarFormulario(req, res, 'SAIDA'),
 
     registrar: async (req, res) => {
