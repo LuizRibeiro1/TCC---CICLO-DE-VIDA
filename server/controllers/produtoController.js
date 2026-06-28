@@ -14,6 +14,15 @@ const formatarData = (data) => {
     return `${dia}/${mes}/${ano}`
 }
 
+const formatarDataInput = (data) => {
+    if (!data) return ''
+    const date = new Date(data)
+    const dia = String(date.getUTCDate()).padStart(2, '0')
+    const mes = String(date.getUTCMonth() + 1).padStart(2, '0')
+    const ano = date.getUTCFullYear()
+    return `${ano}-${mes}-${dia}`
+}
+
 const montarStatus = (diasRestantes) => {
     if (diasRestantes < 0) {
         return { label: 'VENCIDO', classe: 'status-vencido' }
@@ -120,75 +129,18 @@ module.exports = {
         }
     },
 
-    exibirEditar: async (req, res) => {
+    exibirEdicao: async (req, res) => {
         try {
             const produto = await produtoModel.buscarPorId(req.params.id)
+            const loteBruto = await produtoModel.buscarLotePorProduto(req.params.id)
 
             if (!produto || !produto.ativo) {
                 return res.status(404).render('erro', { mensagem: 'Produto não encontrado' })
             }
 
-            return res.render('produtos/editar', {
-                usuario: req.usuario,
-                ehAdmin: req.usuario.perfil === 'ADMINISTRADOR',
-                produto
-            })
-        } catch (erro) {
-            console.error(erro)
-            res.status(500).render('erro', { mensagem: 'Erro ao carregar produto' })
-        }
-    },
-
-    atualizar: async (req, res) => {
-        try {
-            const { nome, categoria, descricao, preco, fornecedor } = req.body
-
-            if (!nome || !categoria) {
-                return res.status(400).render('erro', { mensagem: 'Preencha os campos obrigatórios' })
-            }
-
-            const atualizado = await produtoModel.atualizar(req.params.id, {
-                nome: nome.trim(),
-                categoria: categoria.trim(),
-                descricao: descricao?.trim(),
-                preco: preco || null,
-                fornecedor: fornecedor?.trim()
-            })
-
-            if (!atualizado) {
-                return res.status(404).render('erro', { mensagem: 'Produto não encontrado' })
-            }
-
-            return res.redirect('/home')
-        } catch (erro) {
-            console.error(erro)
-            res.status(500).render('erro', { mensagem: 'Erro ao atualizar produto' })
-        }
-    },
-
-    desativar: async (req, res) => {
-        try {
-            const desativado = await produtoModel.desativar(parseInt(req.params.id, 10), req.usuario.id)
-
-            if (!desativado) {
-                return res.status(404).render('erro', { mensagem: 'Produto não encontrado' })
-            }
-
-            return res.redirect('/home')
-        } catch (erro) {
-            console.error(erro)
-            res.status(500).render('erro', { mensagem: 'Erro ao desativar produto' })
-        }
-    },
-
-    exibirEdicao: async (req, res) => {
-        try {
-            const produto = await produtoModel.buscarPorId(req.params.id)
-            const lote = await produtoModel.buscarLotePorProduto(req.params.id)
-
-            if (!produto) {
-                return res.status(404).render('erro', { mensagem: 'Produto não encontrado' })
-            }
+            const lote = loteBruto
+                ? { ...loteBruto, validade_input: formatarDataInput(loteBruto.data_validade) }
+                : null
 
             return res.render('produtos/editar', {
                 usuario: req.usuario,
@@ -277,7 +229,12 @@ module.exports = {
 
     desativar: async (req, res) => {
         try {
-            await produtoModel.desativarProduto(req.params.id)
+            const desativado = await produtoModel.desativar(parseInt(req.params.id, 10), req.usuario.id)
+
+            if (!desativado) {
+                return res.status(404).render('erro', { mensagem: 'Produto não encontrado' })
+            }
+
             return res.redirect('/home')
         } catch (erro) {
             console.error(erro)

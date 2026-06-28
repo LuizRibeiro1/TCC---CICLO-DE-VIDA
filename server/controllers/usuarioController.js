@@ -96,7 +96,7 @@ module.exports = {
         res.redirect("/login")
     },
 
-    // GET /usuarios/editar — formulário de edição (somente admin)
+    // GET /usuarios/editar — formulário de edição do perfil do usuário logado
     exibirEditar: async (req, res) => {
         try {
             const usuario = await usuarioModel.buscarPorId(req.usuario.id)
@@ -115,7 +115,7 @@ module.exports = {
         }
     },
 
-    // POST /usuarios/atualizar — salva alterações do perfil (somente admin)
+    // POST /usuarios/atualizar — salva alterações do perfil do usuário logado
     atualizar: async (req, res) => {
         try {
             const { nome, email, senha, confirmar_senha } = req.body
@@ -189,9 +189,7 @@ module.exports = {
             console.error(erro)
             res.status(500).json({ mensagem: "Erro ao buscar usuários" })
         }
-    }
-
-    ,
+    },
 
     // --- Ações administrativas (somente ADMIN via rotas protegidas) ---
     // GET /usuarios/gerenciar — lista usuários (view)

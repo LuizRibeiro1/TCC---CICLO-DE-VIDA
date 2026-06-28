@@ -106,8 +106,8 @@ module.exports = {
         `
         const [resultado] = await db.execute(query, [id])
         return resultado.affectedRows
-    }
-,
+    },
+
     // DEV: retorna todos os usuários sem expor a senha (rota GET /usuarios)
     listarTodos: async () => {
         const query = `

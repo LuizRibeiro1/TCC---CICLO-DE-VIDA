@@ -15,8 +15,4 @@ router.get("/:id/movimentar", verificarToken, produtoController.exibirMovimentac
 router.post("/:id/movimentar", verificarToken, produtoController.movimentar)
 router.post("/:id/desativar", verificarToken, produtoController.desativar)
 
-router.get("/:id/editar", verificarToken, produtoController.exibirEditar)
-router.post("/:id/atualizar", verificarToken, produtoController.atualizar)
-router.post("/:id/desativar", verificarToken, produtoController.desativar)
-
 module.exports = router

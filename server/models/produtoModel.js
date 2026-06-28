@@ -90,20 +90,15 @@ module.exports = {
     },
 
     buscarPorId: async (idProduto) => {
-        const [linhas] = await db.execute(`
-            SELECT
-                id_produto,
-                nome_produto,
-                descricao_produto,
-                categoria_produto,
-                preco_produto,
-                fornecedor_produto,
-                ativo
+        const query = `
+            SELECT id_produto, nome_produto, descricao_produto, categoria_produto,
+                   preco_produto, fornecedor_produto, ativo
             FROM PRODUTO
             WHERE id_produto = ?
-        `, [idProduto])
+        `
 
-        return linhas[0]
+        const [linhas] = await db.execute(query, [idProduto])
+        return linhas[0] || null
     },
 
     buscarLotePorProduto: async (idProduto) => {
@@ -169,16 +164,6 @@ module.exports = {
         }
     },
 
-    desativarProduto: async (idProduto) => {
-        const [resultado] = await db.execute(`
-            UPDATE PRODUTO
-            SET ativo = 0
-            WHERE id_produto = ?
-        `, [idProduto])
-
-        return resultado.affectedRows > 0
-    },
-
     registrarMovimentacao: async ({ idProduto, idUsuario, tipo, quantidade }) => {
         const conexao = await db.getConnection()
 
@@ -242,38 +227,6 @@ module.exports = {
 
         const [linhas] = await db.execute(query)
         return linhas.map((item) => item.categoria_produto)
-    },
-
-    buscarPorId: async (idProduto) => {
-        const query = `
-            SELECT id_produto, nome_produto, descricao_produto, categoria_produto,
-                   preco_produto, fornecedor_produto, ativo
-            FROM PRODUTO
-            WHERE id_produto = ?
-        `
-
-        const [linhas] = await db.execute(query, [idProduto])
-        return linhas[0] || null
-    },
-
-    atualizar: async (idProduto, dados) => {
-        const query = `
-            UPDATE PRODUTO
-            SET nome_produto = ?, descricao_produto = ?, categoria_produto = ?,
-                preco_produto = ?, fornecedor_produto = ?
-            WHERE id_produto = ? AND ativo = 1
-        `
-
-        const [resultado] = await db.execute(query, [
-            dados.nome,
-            dados.descricao || null,
-            dados.categoria,
-            dados.preco || null,
-            dados.fornecedor || null,
-            idProduto
-        ])
-
-        return resultado.affectedRows > 0
     },
 
     desativar: async (idProduto, idUsuario) => {
