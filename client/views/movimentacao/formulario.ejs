@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <%- include('../partials/head', { titulo: 'LifeStock - ' + titulo }) %>
+</head>
+<body class="dashboard-page">
+
+    <%- include('../partials/header') %>
+
+    <main class="dashboard-main">
+        <h1 class="form-page-title"><%= titulo %></h1>
+        <p class="form-page-subtitle">
+            <%= tipo === 'ENTRADA'
+                ? 'Registre a entrada de produtos no estoque.'
+                : 'Registre a saída de produtos do estoque.' %>
+        </p>
+
+        <% if (erro) { %>
+            <div class="alerta alerta-erro"><%= erro %></div>
+        <% } %>
+
+        <div class="form-card">
+            <form action="/movimentacao/<%= tipo === 'ENTRADA' ? 'entrada' : 'saida' %>" method="POST">
+
+                <div class="form-group">
+                    <label for="id_lote">Lote / Produto</label>
+                    <select class="form-control" id="id_lote" name="id_lote" required>
+                        <option value="">Selecione um lote</option>
+                        <% lotes.forEach(function(lote) { %>
+                            <option value="<%= lote.id_lote %>"
+                                <%= String(idLotePreSelecionado) === String(lote.id_lote) ? 'selected' : '' %>>
+                                <%= lote.nome_produto %> — Lote <%= lote.lote_formatado %> (<%= lote.quantidade %> un. | Val: <%= lote.validade_formatada %>)
+                            </option>
+                        <% }) %>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="quantidade">Quantidade</label>
+                    <input class="form-control" type="number" id="quantidade" name="quantidade" min="1" required>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-novo-produto">
+                        Registrar <%= tipo === 'ENTRADA' ? 'entrada' : 'saída' %>
+                    </button>
+                    <a href="/home" class="btn-secondary-action">Voltar</a>
+                </div>
+
+            </form>
+        </div>
+    </main>
+
+</body>
+</html>

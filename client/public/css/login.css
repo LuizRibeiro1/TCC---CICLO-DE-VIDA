@@ -36,12 +36,24 @@ body.login-page {
 /* --- COLUNA ESQUERDA --- */
 .login-page .left {
     width: 50%;
-    background: var(--azul-principal);
+    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     color: white;
+    background-color: var(--azul-principal);
+    background-image:
+        linear-gradient(rgba(19, 31, 143, 0.35), rgba(19, 31, 143, 0.35)),
+        url('/img/imagemfundo.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.login-page .left > * {
+    position: relative;
+    z-index: 1;
 }
 
 .login-page .logo {

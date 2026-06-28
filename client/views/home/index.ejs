@@ -8,10 +8,175 @@
     <%- include('../partials/header') %>
 
     <main class="dashboard-main">
-        <div style="padding:60px 0;text-align:center;color:#7b879c;font-size:18px;">
-            Conteúdo principal temporariamente desabilitado.
+
+        <div class="toolbar">
+            <form method="GET" action="/home">
+                <div class="toolbar-input">
+                    <i class="fa-solid fa-filter"></i>
+                    <select name="categoria" onchange="this.form.submit()">
+                        <option value="">Filtrar por Categoria</option>
+                        <% categorias.forEach(function(cat) { %>
+                            <option value="<%= cat %>" <%= categoria === cat ? 'selected' : '' %>><%= cat %></option>
+                        <% }) %>
+                    </select>
+                </div>
+                <div class="toolbar-input">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" name="busca" placeholder="Pesquisar" value="<%= busca %>">
+                </div>
+                <% if (filtro) { %>
+                    <input type="hidden" name="filtro" value="<%= filtro %>">
+                <% } %>
+                <button type="submit" class="btn-secondary-action" style="padding:10px 16px;">Buscar</button>
+            </form>
+            <a href="/produtos/cadastrar" class="btn-novo-produto">
+                <i class="fa-solid fa-plus"></i> NOVO PRODUTO
+            </a>
         </div>
+
+        <div class="resumo-grid">
+            <a href="/home<%= categoria ? '?categoria=' + encodeURIComponent(categoria) : '' %><%= busca ? (categoria ? '&' : '?') + 'busca=' + encodeURIComponent(busca) : '' %>" class="resumo-card azul resumo-card-link">
+                <div>
+                    <h3>PRODUTOS EM ESTOQUE</h3>
+                    <div class="numero"><%= resumo.total_estoque || 0 %></div>
+                </div>
+                <i class="fa-solid fa-boxes-stacked"></i>
+            </a>
+
+            <a href="/home?filtro=proximo<%= categoria ? '&categoria=' + encodeURIComponent(categoria) : '' %><%= busca ? '&busca=' + encodeURIComponent(busca) : '' %>" class="resumo-card laranja resumo-card-link">
+                <div>
+                    <h3>PRÓXIMO DA VALIDADE</h3>
+                    <div class="numero"><%= resumo.proximo_validade || 0 %></div>
+                </div>
+                <i class="fa-solid fa-clock"></i>
+            </a>
+
+            <a href="/home?filtro=vencido<%= categoria ? '&categoria=' + encodeURIComponent(categoria) : '' %><%= busca ? '&busca=' + encodeURIComponent(busca) : '' %>" class="resumo-card vermelho resumo-card-link">
+                <div>
+                    <h3>PRODUTOS VENCIDOS</h3>
+                    <div class="numero"><%= resumo.vencidos || 0 %></div>
+                </div>
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </a>
+
+            <div class="movimentacao-box">
+                <a href="/movimentacao/entrada">
+                    ENTRADA
+                    <span class="movimentacao-numero"><%= movimentacao.entrada || 0 %></span>
+                </a>
+                <a href="/movimentacao/saida">
+                    SAÍDA
+                    <span class="movimentacao-numero"><%= movimentacao.saida || 0 %></span>
+                </a>
+                <% if (ehAdmin) { %>
+                    <form action="/movimentacao/reset" method="POST" class="movimentacao-reset-form" onsubmit="return confirm('Redefinir entradas e saídas para zero? Os produtos e estoques não serão alterados.')">
+                        <button type="submit" class="btn-movimentacao-reset" title="Redefinir contadores de movimentação">
+                            <i class="fa-solid fa-rotate-left"></i> RESET
+                        </button>
+                    </form>
+                <% } %>
+            </div>
+        </div>
+
+        <% if (filtro) { %>
+            <div style="margin-bottom:16px;">
+                <a href="/home<%= categoria ? '?categoria=' + encodeURIComponent(categoria) : '' %><%= busca ? (categoria ? '&' : '?') + 'busca=' + encodeURIComponent(busca) : '' %>" class="btn-secondary-action" style="padding:8px 14px;font-size:12px;">
+                    <i class="fa-solid fa-xmark"></i> Limpar filtro de status
+                </a>
+            </div>
+        <% } %>
+
+        <div class="tabela-container">
+            <table class="tabela-estoque">
+                <thead>
+                    <tr>
+                        <th>PRODUTO</th>
+                        <th>LOTE</th>
+                        <th>CATEGORIA</th>
+                        <th>QUANTIDADE</th>
+                        <th>VALIDADE</th>
+                        <th>STATUS</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (produtos.length === 0) { %>
+                        <tr>
+                            <td colspan="7" class="tabela-vazia">Nenhum produto encontrado.</td>
+                        </tr>
+                    <% } else { %>
+                        <% produtos.forEach(function(item) { %>
+                            <tr>
+                                <td>
+                                    <div class="produto-cell">
+                                        <span class="produto-icon"><i class="fa-solid fa-box"></i></span>
+                                        <%= item.nome_produto %>
+                                    </div>
+                                </td>
+                                <td><%= item.lote_formatado %></td>
+                                <td><%= item.categoria_produto %></td>
+                                <td>
+                                    <a href="/movimentacao/saida?lote=<%= item.id_lote %>" class="quantidade-link" title="Registrar saída deste lote">
+                                        <%= item.quantidade %>
+                                    </a>
+                                </td>
+                                <td class="validade-cell">
+                                    <%= item.validade_formatada %>
+                                    <span class="validade-relativa status-<%= item.status_classe.replace('status-', '') %>-text">
+                                        (<%= item.validade_relativa %>)
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="status-badge <%= item.status_classe %>"><%= item.status_label %></span>
+                                </td>
+                                <td class="acoes-cell">
+                                    <div class="menu-acoes">
+                                        <button type="button" class="btn-menu-acoes" aria-label="Ações">
+                                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                                        </button>
+                                        <div class="menu-acoes-dropdown">
+                                            <form action="/produtos/<%= item.id_produto %>/desativar" method="POST" onsubmit="return confirm('Deseja desativar este produto? Ele será removido do estoque ativo.')">
+                                                <button type="submit" class="menu-acoes-item menu-acoes-desativar">DESATIVAR</button>
+                                            </form>
+                                            <a href="/produtos/<%= item.id_produto %>/editar" class="menu-acoes-item">MODIFICAR</a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    <% } %>
+                </tbody>
+            </table>
+
+            <% if (totalPaginas > 1) { %>
+                <div class="paginacao">
+                    <% if (pagina > 1) { %>
+                        <a href="/home?pagina=<%= pagina - 1 %><%= busca ? '&busca=' + encodeURIComponent(busca) : '' %><%= filtro ? '&filtro=' + filtro : '' %><%= categoria ? '&categoria=' + encodeURIComponent(categoria) : '' %>">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </a>
+                    <% } %>
+
+                    <% for (let i = 1; i <= totalPaginas; i++) { %>
+                        <% if (i === pagina) { %>
+                            <span class="ativa"><%= i %></span>
+                        <% } else if (i === 1 || i === totalPaginas || (i >= pagina - 1 && i <= pagina + 1)) { %>
+                            <a href="/home?pagina=<%= i %><%= busca ? '&busca=' + encodeURIComponent(busca) : '' %><%= filtro ? '&filtro=' + filtro : '' %><%= categoria ? '&categoria=' + encodeURIComponent(categoria) : '' %>"><%= i %></a>
+                        <% } else if (i === pagina - 2 || i === pagina + 2) { %>
+                            <span>...</span>
+                        <% } %>
+                    <% } %>
+
+                    <% if (pagina < totalPaginas) { %>
+                        <a href="/home?pagina=<%= pagina + 1 %><%= busca ? '&busca=' + encodeURIComponent(busca) : '' %><%= filtro ? '&filtro=' + filtro : '' %><%= categoria ? '&categoria=' + encodeURIComponent(categoria) : '' %>">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </a>
+                    <% } %>
+                </div>
+            <% } %>
+        </div>
+
     </main>
 
+    <script src="/js/dashboard.js"></script>
 </body>
 </html>
