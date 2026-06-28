@@ -89,18 +89,6 @@ module.exports = {
         return linhas[0]
     },
 
-    listarCategorias: async () => {
-        const query = `
-            SELECT DISTINCT categoria_produto
-            FROM PRODUTO
-            WHERE ativo = 1 AND categoria_produto IS NOT NULL AND categoria_produto != ''
-            ORDER BY categoria_produto ASC
-        `
-
-        const [linhas] = await db.execute(query)
-        return linhas.map((item) => item.categoria_produto)
-    },
-
     buscarPorId: async (idProduto) => {
         const query = `
             SELECT id_produto, nome_produto, descricao_produto, categoria_produto,
@@ -113,24 +101,132 @@ module.exports = {
         return linhas[0] || null
     },
 
-    atualizar: async (idProduto, dados) => {
+    buscarLotePorProduto: async (idProduto) => {
+        const [linhas] = await db.execute(`
+            SELECT id_lote, quantidade, data_validade
+            FROM LOTE
+            WHERE id_produto = ?
+            ORDER BY data_validade ASC, id_lote ASC
+            LIMIT 1
+        `, [idProduto])
+
+        return linhas[0]
+    },
+
+    editarProduto: async (idProduto, dados) => {
+        const conexao = await db.getConnection()
+
+        try {
+            await conexao.beginTransaction()
+
+            await conexao.execute(`
+                UPDATE PRODUTO
+                SET nome_produto = ?, descricao_produto = ?, categoria_produto = ?, preco_produto = ?, fornecedor_produto = ?
+                WHERE id_produto = ?
+            `, [
+                dados.nome,
+                dados.descricao || null,
+                dados.categoria,
+                dados.preco || null,
+                dados.fornecedor || null,
+                idProduto
+            ])
+
+            if (dados.quantidade !== undefined || dados.validade) {
+                const [lotes] = await conexao.execute(`
+                    SELECT id_lote
+                    FROM LOTE
+                    WHERE id_produto = ?
+                    ORDER BY data_validade ASC, id_lote ASC
+                    LIMIT 1
+                `, [idProduto])
+
+                if (lotes[0]) {
+                    await conexao.execute(`
+                        UPDATE LOTE
+                        SET quantidade = ?, data_validade = ?
+                        WHERE id_lote = ?
+                    `, [
+                        dados.quantidade,
+                        dados.validade,
+                        lotes[0].id_lote
+                    ])
+                }
+            }
+
+            await conexao.commit()
+            return true
+        } catch (erro) {
+            await conexao.rollback()
+            throw erro
+        } finally {
+            conexao.release()
+        }
+    },
+
+    registrarMovimentacao: async ({ idProduto, idUsuario, tipo, quantidade }) => {
+        const conexao = await db.getConnection()
+
+        try {
+            await conexao.beginTransaction()
+
+            const [lotes] = await conexao.execute(`
+                SELECT id_lote, quantidade
+                FROM LOTE
+                WHERE id_produto = ?
+                ORDER BY data_validade ASC, id_lote ASC
+                LIMIT 1
+            `, [idProduto])
+
+            if (!lotes[0]) {
+                throw new Error('Lote não encontrado')
+            }
+
+            const quantidadeNumero = parseInt(quantidade, 10)
+            if (Number.isNaN(quantidadeNumero) || quantidadeNumero <= 0) {
+                throw new Error('Informe uma quantidade válida')
+            }
+
+            const lote = lotes[0]
+            const novaQuantidade = tipo === 'ENTRADA'
+                ? lote.quantidade + quantidadeNumero
+                : lote.quantidade - quantidadeNumero
+
+            if (novaQuantidade < 0) {
+                throw new Error('Estoque insuficiente para esta saída')
+            }
+
+            await conexao.execute(`
+                UPDATE LOTE
+                SET quantidade = ?
+                WHERE id_lote = ?
+            `, [novaQuantidade, lote.id_lote])
+
+            await conexao.execute(`
+                INSERT INTO MOVIMENTACAO_ESTOQUE (id_usuario, id_lote, data_hora, tipo_movimentacao, quantidade)
+                VALUES (?, ?, NOW(), ?, ?)
+            `, [idUsuario, lote.id_lote, tipo, quantidadeNumero])
+
+            await conexao.commit()
+            return { idLote: lote.id_lote, novaQuantidade }
+        } catch (erro) {
+            await conexao.rollback()
+            throw erro
+        } finally {
+            conexao.release()
+        }
+    },
+
+    listarCategorias: async () => {
         const query = `
-            UPDATE PRODUTO
-            SET nome_produto = ?, descricao_produto = ?, categoria_produto = ?,
-                preco_produto = ?, fornecedor_produto = ?
-            WHERE id_produto = ? AND ativo = 1
+            SELECT DISTINCT categoria_produto
+            FROM PRODUTO
+            WHERE ativo = 1 AND categoria_produto IS NOT NULL AND categoria_produto != ''
+            ORDER BY categoria_produto ASC
         `
 
-        const [resultado] = await db.execute(query, [
-            dados.nome,
-            dados.descricao || null,
-            dados.categoria,
-            dados.preco || null,
-            dados.fornecedor || null,
-            idProduto
-        ])
-
-        return resultado.affectedRows > 0
+        const [linhas] = await db.execute(query)
+        return linhas.map((item) => item.categoria_produto)
     },
 
     desativar: async (idProduto, idUsuario) => {

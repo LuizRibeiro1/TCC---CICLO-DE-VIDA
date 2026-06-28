@@ -18,8 +18,8 @@ router.post("/cadastrar", usuarioController.cadastrar)
 router.get("/logout", usuarioController.logout)
 
 // Edição de perfil — disponível para usuário autenticado (pode editar seu próprio perfil)
-router.get("/editar", verificarToken, somenteAdmin, usuarioController.exibirEditar)
-router.post("/atualizar", verificarToken, somenteAdmin, usuarioController.atualizar)
+router.get("/editar", verificarToken, usuarioController.exibirEditar)
+router.post("/atualizar", verificarToken, usuarioController.atualizar)
 
 // Rotas administrativas para gerenciar usuários
 router.get("/gerenciar", verificarToken, somenteAdmin, usuarioController.gerenciar)

@@ -8,11 +8,11 @@
     <%- include('../partials/header') %>
 
     <main class="dashboard-main">
-        <h1 class="form-page-title">Modificar produto</h1>
-        <p class="form-page-subtitle">Atualize as informações do produto selecionado.</p>
+        <h1 class="form-page-title">Editar produto</h1>
+        <p class="form-page-subtitle">Atualize os dados do produto e do lote vigente.</p>
 
         <div class="form-card">
-            <form action="/produtos/<%= produto.id_produto %>/atualizar" method="POST">
+            <form action="/produtos/<%= produto.id_produto %>/editar" method="POST">
 
                 <div class="form-group">
                     <label for="nome">Nome do produto</label>
@@ -22,6 +22,16 @@
                 <div class="form-group">
                     <label for="categoria">Categoria</label>
                     <input class="form-control" type="text" id="categoria" name="categoria" maxlength="45" value="<%= produto.categoria_produto %>" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="quantidade">Quantidade</label>
+                    <input class="form-control" type="number" id="quantidade" name="quantidade" min="0" value="<%= lote ? lote.quantidade : 0 %>" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="validade">Validade</label>
+                    <input class="form-control" type="date" id="validade" name="validade" value="<%= lote ? lote.validade_input : '' %>" required>
                 </div>
 
                 <div class="form-group">
