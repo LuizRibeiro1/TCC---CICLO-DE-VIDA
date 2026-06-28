@@ -179,5 +179,109 @@ module.exports = {
             console.error(erro)
             res.status(500).render('erro', { mensagem: 'Erro ao desativar produto' })
         }
+    },
+
+    exibirEdicao: async (req, res) => {
+        try {
+            const produto = await produtoModel.buscarPorId(req.params.id)
+            const lote = await produtoModel.buscarLotePorProduto(req.params.id)
+
+            if (!produto) {
+                return res.status(404).render('erro', { mensagem: 'Produto não encontrado' })
+            }
+
+            return res.render('produtos/editar', {
+                usuario: req.usuario,
+                ehAdmin: req.usuario.perfil === 'ADMINISTRADOR',
+                produto,
+                lote
+            })
+        } catch (erro) {
+            console.error(erro)
+            return res.status(500).render('erro', { mensagem: 'Erro ao carregar edição do produto' })
+        }
+    },
+
+    editar: async (req, res) => {
+        try {
+            const { nome, categoria, quantidade, validade, descricao, preco, fornecedor } = req.body
+
+            if (!nome || !categoria || !quantidade || !validade) {
+                return res.status(400).render('erro', { mensagem: 'Preencha os campos obrigatórios do produto' })
+            }
+
+            const quantidadeNumero = parseInt(quantidade, 10)
+            if (Number.isNaN(quantidadeNumero) || quantidadeNumero < 0) {
+                return res.status(400).render('erro', { mensagem: 'Informe uma quantidade válida' })
+            }
+
+            await produtoModel.editarProduto(req.params.id, {
+                nome: nome.trim(),
+                categoria: categoria.trim(),
+                quantidade: quantidadeNumero,
+                validade,
+                descricao: descricao?.trim(),
+                preco: preco || null,
+                fornecedor: fornecedor?.trim()
+            })
+
+            return res.redirect('/home')
+        } catch (erro) {
+            console.error(erro)
+            return res.status(500).render('erro', { mensagem: 'Erro ao editar produto' })
+        }
+    },
+
+    exibirMovimentacao: async (req, res) => {
+        try {
+            const produto = await produtoModel.buscarPorId(req.params.id)
+            const lote = await produtoModel.buscarLotePorProduto(req.params.id)
+
+            if (!produto) {
+                return res.status(404).render('erro', { mensagem: 'Produto não encontrado' })
+            }
+
+            return res.render('produtos/movimentar', {
+                usuario: req.usuario,
+                ehAdmin: req.usuario.perfil === 'ADMINISTRADOR',
+                produto,
+                lote
+            })
+        } catch (erro) {
+            console.error(erro)
+            return res.status(500).render('erro', { mensagem: 'Erro ao carregar movimentação' })
+        }
+    },
+
+    movimentar: async (req, res) => {
+        try {
+            const { tipo, quantidade } = req.body
+
+            if (!tipo || !quantidade) {
+                return res.status(400).render('erro', { mensagem: 'Informe o tipo e a quantidade da movimentação' })
+            }
+
+            await produtoModel.registrarMovimentacao({
+                idProduto: req.params.id,
+                idUsuario: req.usuario.id,
+                tipo,
+                quantidade
+            })
+
+            return res.redirect('/home')
+        } catch (erro) {
+            console.error(erro)
+            return res.status(500).render('erro', { mensagem: erro.message || 'Erro ao registrar movimentação' })
+        }
+    },
+
+    desativar: async (req, res) => {
+        try {
+            await produtoModel.desativarProduto(req.params.id)
+            return res.redirect('/home')
+        } catch (erro) {
+            console.error(erro)
+            return res.status(500).render('erro', { mensagem: 'Erro ao desativar produto' })
+        }
     }
 }
